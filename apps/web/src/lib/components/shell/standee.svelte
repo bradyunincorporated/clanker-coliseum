@@ -1,68 +1,89 @@
 <script lang="ts">
-  // A cardboard stand-in where a fighter will stand, with the shadows a real one will get:
-  // a tight dark contact shadow at the feet and a long soft one thrown toward the camera.
-  let { name, color, x, flip = false }: { name: string; color: string; x: number; flip?: boolean } = $props();
+  // Where a fighter will stand on the stage: the fighter's own art when it has some, otherwise
+  // a paper stand-in. Either way it gets the floor shadows a real fighter gets. Sizes are
+  // stage-box pixels; `x` is a percentage across the box.
+  let { name, color, src, x, flip = false }: { name: string; color: string; src?: string; x: number; flip?: boolean } = $props();
 </script>
 
-<div class="standee" style:left="{x}%">
+<div class="standee" class:has-art={!!src} style:left="{x}%">
   <div class="cast"></div>
   <div class="contact"></div>
-  <svg viewBox="0 0 120 170" class="card" style:transform={flip ? "scaleX(-1)" : undefined} aria-hidden="true">
-    <path d="M14 168c-4-48 4-84 22-100-12-30 6-60 34-60s44 30 30 60c16 18 20 54 16 100z" fill="var(--paper)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round" />
-    <path d="M24 162c-2-40 6-70 22-86-10-26 4-52 26-52s34 26 22 52c14 16 16 48 14 86z" fill={color} opacity="0.85" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4" />
-    <circle cx="84" cy="54" r="5" fill="var(--ink)" />
-  </svg>
+  {#if src}
+    <img class="sprite" {src} alt="" style:transform={flip ? "scaleX(-1)" : undefined} />
+  {:else}
+    <svg viewBox="0 0 120 170" class="card" style:transform={flip ? "scaleX(-1)" : undefined} aria-hidden="true">
+      <path d="M14 168c-4-48 4-84 22-100-12-30 6-60 34-60s44 30 30 60c16 18 20 54 16 100z" fill="var(--paper)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round" />
+      <path d="M24 162c-2-40 6-70 22-86-10-26 4-52 26-52s34 26 22 52c14 16 16 48 14 86z" fill={color} stroke="var(--ink)" stroke-width="2.5" />
+      <circle cx="84" cy="54" r="8" fill="var(--paper)" stroke="var(--ink)" stroke-width="3" />
+      <circle cx="87" cy="54" r="3.5" fill="var(--ink)" />
+    </svg>
+  {/if}
   <p class="tag">{name}</p>
 </div>
 
 <style>
   .standee {
     position: absolute;
-    bottom: 12.5%;
-    width: 15cqw;
-    height: 37cqh;
+    bottom: 90px;
+    width: 180px;
+    height: 250px;
     translate: -50% 0;
+  }
+  .standee.has-art {
+    width: 435px;
+    height: 283px;
   }
   .card {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0.3cqw 0 0 rgb(43 37 34 / 0.6));
+    filter: drop-shadow(4px 0 0 rgb(27 33 64 / 0.6));
+  }
+  .sprite {
+    position: absolute;
+    bottom: -10%;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
   }
   .contact {
     position: absolute;
     left: -14%;
     right: -14%;
-    bottom: -2.6cqh;
-    height: 5.2cqh;
+    bottom: -18px;
+    height: 36px;
     border-radius: 50%;
-    background: radial-gradient(closest-side, rgb(15 18 32 / 0.85) 40%, rgb(15 18 32 / 0.4) 70%, transparent);
+    background: radial-gradient(closest-side, rgb(12 17 38 / 0.8) 40%, rgb(12 17 38 / 0.35) 70%, transparent);
   }
   .cast {
     position: absolute;
     left: -4%;
     right: -4%;
-    bottom: -11cqh;
-    height: 11cqh;
+    bottom: -70px;
+    height: 70px;
     border-radius: 0 0 50% 50% / 0 0 100% 100%;
-    background: linear-gradient(rgb(15 18 32 / 0.55), transparent);
-    filter: blur(0.6cqh);
+    background: linear-gradient(rgb(12 17 38 / 0.5), transparent);
+    filter: blur(4px);
+  }
+  .has-art .contact,
+  .has-art .cast {
+    left: 30%;
+    right: 30%;
   }
   .tag {
     position: absolute;
     left: 50%;
     bottom: 100%;
-    translate: -50% -0.6cqh;
+    translate: -50% -8px;
     rotate: -3deg;
-    padding: 0.2cqh 1cqw;
-    border: 0.3cqh solid var(--ink);
-    border-radius: 0.4cqh;
-    background: var(--mustard);
-    font-family: var(--font-slab);
-    font-size: 2.6cqh;
-    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-size: 26px;
+    line-height: 1;
     white-space: nowrap;
-    box-shadow: 0.4cqh 0.4cqh 0 var(--ink);
+    color: var(--paper);
+    paint-order: stroke fill;
+    -webkit-text-stroke: 6px var(--ink);
+    text-shadow: 0 3px 0 var(--ink);
   }
 </style>

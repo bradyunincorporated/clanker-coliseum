@@ -1,85 +1,236 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import { Button } from "#lib/components/ui/button/index.js";
-  import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
   import BrainSelect from "#lib/components/shell/brain-select.svelte";
+  import CornerStand from "#lib/components/shell/corner-stand.svelte";
+  import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
+  import SignButton from "#lib/components/ui/sign-button.svelte";
   import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
-  import { ROSTER, cssColor, picksFrom } from "#lib/shell/roster.js";
+  import { ROSTER, picksFrom } from "#lib/shell/roster.js";
 
   const initial = picksFrom(page.url.searchParams);
   let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
   // Each corner picks its own brain; the choice rides along in the query (`b1`, `b2`).
   let brains = $state<Brains>(brainsFrom(page.url.searchParams));
   const chosen = $derived(picks.map((id) => ROSTER.find((f) => f.id === id) ?? ROSTER[0]));
-  const corners = ["Left corner", "Right corner"];
+  const next = $derived(`/match${setupQuery([{ id: picks[0] }, { id: picks[1] }], brains, page.url.searchParams)}`);
+
+  function cycle(side: 0 | 1, by: number) {
+    const at = ROSTER.findIndex((f) => f.id === picks[side]);
+    picks[side] = ROSTER[(at + by + ROSTER.length) % ROSTER.length].id;
+  }
+
+  // A and D turn the left corner, the arrow keys the right one, Enter moves on.
+  function onKey(e: KeyboardEvent) {
+    if ((e.target as HTMLElement).closest("button, a")) {
+      if (e.code === "Enter" || e.code === "Space") return;
+    }
+    if (e.code === "KeyA") cycle(0, -1);
+    else if (e.code === "KeyD") cycle(0, 1);
+    else if (e.code === "ArrowLeft") cycle(1, -1);
+    else if (e.code === "ArrowRight") cycle(1, 1);
+    else if (e.code === "Enter") void goto(next);
+  }
 </script>
 
-<svelte:head><title>Pick your clankers</title></svelte:head>
+<svelte:head><title>Pick your fighters</title></svelte:head>
+<svelte:window onkeydown={onKey} />
 
-<main class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4">
-  <header class="text-center">
-    <h1 class="font-script text-5xl leading-none text-hero drop-shadow-[3px_3px_0_var(--ink)]">Pick your clankers</h1>
-  </header>
-
-  <section class="grid gap-6 md:grid-cols-[1fr_auto_1fr] md:items-start">
-    {#each [0, 1] as side (side)}
+<main class="absolute inset-0">
+  <DinerDiorama label="The diner with the house lights down" mood="dim" spot>
+    {#each [0, 1] as const as side (side)}
       {@const def = chosen[side]}
-      <article class="flex flex-col gap-3 {side === 1 ? 'md:order-3' : ''}">
-        <div class="rounded-lg border-4 border-ink bg-panel shadow-offset-lg">
-          <p class="callout flex items-center justify-between border-b-4 border-ink bg-ink px-4 py-1.5 text-sm text-paper">
-            {corners[side]}
-            <span class="flex gap-1">
-              {#each def.types as type (type)}
-                <span class="rounded-sm bg-mustard px-2 text-xs text-ink">{type}</span>
-              {/each}
-            </span>
-          </p>
-          <div class="relative p-3">
-            <FighterPortrait color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} flip={side === 1} class="aspect-[16/6] rounded border-[3px] border-ink" />
-            <h2 class="absolute bottom-1 font-script text-5xl leading-none text-hero [text-shadow:3px_3px_0_var(--paper)] right-6">
-              {def.name}
-            </h2>
-          </div>
+      <section class="corner" class:right={side === 1} aria-label="{side === 0 ? 'Left' : 'Right'} corner">
+        <div class="turn">
+          <button type="button" class="arrow" onclick={() => cycle(side, -1)} aria-label="Previous fighter">
+            <img src="/ui/arrow.webp" alt="" />
+          </button>
+          <h2 class="lettering name">{def.name}</h2>
+          <button type="button" class="arrow next" onclick={() => cycle(side, 1)} aria-label="Next fighter">
+            <img src="/ui/arrow.webp" alt="" />
+          </button>
         </div>
+        <CornerStand {def} {side} />
+        <BrainSelect bind:value={brains[side]} {side} class="brain" />
+      </section>
 
-        <div class="relative -mt-1 rounded-md border-[3px] border-ink bg-paper px-4 py-2.5 shadow-offset {side === 1 ? '-rotate-1' : 'rotate-1'}">
-          <p class="font-medium">"{def.blurb}"</p>
-          <p class="callout mt-1.5 text-sm text-hero">Built in: {def.passive.name}</p>
-          <p class="text-sm">{def.passive.description}</p>
-          <ul class="mt-2 grid grid-cols-4 gap-1.5 text-xs">
-            {#each Object.values(def.moves) as move (move.name)}
-              <li class="rounded-sm border-2 border-ink bg-paper-deep px-2 py-1">
-                <span class="block font-bold leading-tight">{move.name}</span>
-                <span class="callout text-xs text-bottle">{move.type} · {move.damage} dmg</span>
-              </li>
-            {/each}
-          </ul>
-        </div>
-
-        <div class="flex flex-wrap items-end justify-between gap-3">
-        <fieldset class="flex flex-wrap gap-2">
-          <legend class="callout mb-1 text-sm">Who's in the {corners[side].toLowerCase()}?</legend>
-          {#each ROSTER as f (f.id)}
-            <label class="cursor-pointer">
-              <input type="radio" class="peer sr-only" name="pick-{side}" value={f.id} bind:group={picks[side]} />
-              <span class="flex items-center gap-2 rounded-md border-[3px] border-ink bg-paper px-3 py-2 font-slab uppercase shadow-offset transition-colors peer-checked:bg-mustard peer-focus-visible:outline-3 peer-focus-visible:outline-hero">
-                <span class="size-5 rounded-full border-2 border-ink" style:background={cssColor(f.sprites.color)}></span>
-                {f.name}
-              </span>
-            </label>
+      <article class="card" class:right={side === 1}>
+        <p class="types">{def.types.join(" / ")}</p>
+        <p class="blurb">{def.blurb}</p>
+        <h3>{def.passive.name}</h3>
+        <p class="passive">{def.passive.description}</p>
+        <ul>
+          {#each Object.values(def.moves) as move (move.name)}
+            <li><span>{move.name}</span><span class="dots"></span><span class="what">{move.type} {move.damage}</span></li>
           {/each}
-        </fieldset>
-        <BrainSelect bind:value={brains[side]} side={side as 0 | 1} class="w-80" />
-        </div>
+        </ul>
       </article>
-      {#if side === 0}
-        <p class="self-center text-center font-script text-7xl text-hero drop-shadow-[3px_3px_0_var(--ink)] md:order-2 md:pt-16">vs.</p>
-      {/if}
-    {/each}
-  </section>
 
-  <div class="flex flex-wrap items-center justify-center gap-4">
-    <Button href="/" variant="secondary">Back</Button>
-    <Button href="/coach{setupQuery([{ id: picks[0] }, { id: picks[1] }], brains)}">Next: the game plan</Button>
-  </div>
+      <!-- Trainer pick goes here: an empty slot per corner, under that corner's menu card. -->
+      <div class="trainer" class:right={side === 1} data-trainer-side={side}></div>
+    {/each}
+
+    <img class="vs" src="/ui/vs.webp" alt="versus" />
+    <div class="go"><SignButton href={next}>Ready</SignButton></div>
+  </DinerDiorama>
+
+  <h1 class="lettering heading">Pick your fighters</h1>
+  <div class="back"><SignButton href="/" tone="cream" size="sm">Back</SignButton></div>
 </main>
+
+<style>
+  .heading {
+    position: absolute;
+    inset: 34px 0 auto;
+    text-align: center;
+    font-size: 46px;
+  }
+  .back {
+    position: absolute;
+    left: 22px;
+    top: 26px;
+  }
+  /* Everything below is placed in the stage box (1280 x 720); the floor line is at 630. */
+  .corner {
+    position: absolute;
+    left: 33%;
+    top: 232px;
+    width: 340px;
+    margin-left: -170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .corner.right {
+    left: 67%;
+  }
+  .name {
+    min-width: 230px;
+    font-size: 42px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .turn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .corner :global(.brain) {
+    margin-top: 10px;
+  }
+  .arrow {
+    flex: none;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    filter: drop-shadow(0 4px 3px rgb(10 14 34 / 0.6));
+    transition: scale 0.15s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .arrow img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .arrow.next img {
+    scale: -1 1;
+  }
+  .arrow:hover,
+  .arrow:focus-visible {
+    scale: 1.2;
+  }
+  .arrow:active {
+    scale: 0.9;
+  }
+  .card {
+    position: absolute;
+    left: 8px;
+    top: 280px;
+    width: 262px;
+    min-height: 262px;
+    padding: 30px 34px 34px;
+    background: url("/ui/card.webp") center / 100% 100% no-repeat;
+    color: var(--ink);
+    font-size: 12.5px;
+    line-height: 1.3;
+    rotate: -2deg;
+    filter: drop-shadow(0 8px 6px rgb(10 14 34 / 0.55));
+  }
+  .card.right {
+    left: auto;
+    right: 8px;
+    rotate: 2deg;
+  }
+  .trainer {
+    position: absolute;
+    left: 14px;
+    top: 572px;
+    width: 250px;
+    height: 136px;
+  }
+  .trainer.right {
+    left: auto;
+    right: 14px;
+  }
+  .types {
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--hero-red);
+  }
+  .blurb {
+    margin-top: 2px;
+    font-weight: 600;
+  }
+  .card h3 {
+    margin-top: 9px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 1.1;
+  }
+  .card ul {
+    margin-top: 9px;
+    padding-top: 7px;
+    border-top: 2px dotted rgb(27 33 64 / 0.4);
+  }
+  .card li {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    font-weight: 600;
+  }
+  .dots {
+    flex: 1;
+    border-bottom: 2px dotted rgb(27 33 64 / 0.35);
+    translate: 0 -3px;
+  }
+  .what {
+    color: #2b6a63;
+  }
+  .vs {
+    position: absolute;
+    left: 50%;
+    top: 318px;
+    width: 150px;
+    margin-left: -75px;
+    filter: drop-shadow(0 8px 6px rgb(10 14 34 / 0.55));
+    animation: thump 1.6s ease-in-out infinite alternate;
+  }
+  .go {
+    position: absolute;
+    inset: 506px 0 auto;
+    display: grid;
+    place-items: center;
+  }
+  @keyframes thump {
+    from { scale: 0.96; rotate: -2deg; }
+    to { scale: 1.04; rotate: 2deg; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vs { animation: none; }
+  }
+</style>

@@ -1,21 +1,18 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
-  import { BRAIN_MODELS, MODEL_BRAINS, type HealthResponse } from "@clanker/arena-service/protocol";
-  import { FIGHTERS } from "@clanker/game";
-  import { Button } from "#lib/components/ui/button/index.js";
-  import { health, startMatch } from "#lib/arena/arena-client.js";
   import { page } from "$app/state";
+  import type { HealthResponse } from "@clanker/arena-service/protocol";
+  import { health, startMatch } from "#lib/arena/arena-client.js";
   import BrainSelect from "#lib/components/shell/brain-select.svelte";
-  import { brainsFrom, type Brains } from "#lib/shell/brains.js";
+  import CornerStand from "#lib/components/shell/corner-stand.svelte";
+  import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
+  import SignButton from "#lib/components/ui/sign-button.svelte";
+  import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
   import { picksFrom } from "#lib/shell/roster.js";
 
-  const roster = Object.values(FIGHTERS);
-  const hex = (n: number) => `#${n.toString(16).padStart(6, "0")}`;
-
-  // Arrive from the fighter pages with `?p1=..&p2=..` and those picks are already set.
-  const arrived = picksFrom(page.url.searchParams);
-  let picks = $state<[string, string]>([arrived[0].id, arrived[1].id]);
+  // Arrive from fighter select with `?p1=..&p2=..&b1=..&b2=..` and the setup is already made.
+  const picks = $derived(picksFrom(page.url.searchParams));
   let brains = $state<Brains>(brainsFrom(page.url.searchParams));
   let service = $state<"checking" | "online" | "offline">("checking");
   let models = $state<HealthResponse["models"] | null>(null);
@@ -29,84 +26,155 @@
   });
 
   async function fight() {
+    if (starting || service === "offline") return;
     starting = true;
     problem = "";
     try {
-      const match = await startMatch({ fighters: picks, brains });
-      await goto(`/match/${match.id}`);
+      const match = await startMatch({ fighters: [picks[0].id, picks[1].id], brains });
+      await goto(`/match/${match.id}${setupQuery(picks, brains, page.url.searchParams)}`);
     } catch (err) {
       problem = err instanceof Error ? err.message : String(err);
       starting = false;
     }
   }
+
+  function onKey(e: KeyboardEvent) {
+    if (e.code === "Enter" && !(e.target as HTMLElement).closest("button, a")) void fight();
+  }
 </script>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4">
-  <header class="text-center">
-    <p class="callout text-sm tracking-[0.3em] text-bottle">Last step</p>
-    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)]">Ring the bell</h1>
-    <p class="callout text-lg">Forty seconds. The machines decide.</p>
-  </header>
+<svelte:head><title>{picks[0].name} vs {picks[1].name}</title></svelte:head>
+<svelte:window onkeydown={onKey} />
 
-  <section class="grid gap-6 md:grid-cols-[1fr_auto_1fr] md:items-center">
-    {#each [0, 1] as side (side)}
-      {@const def = FIGHTERS[picks[side]]}
-      <article class="flex flex-col gap-3 rounded-lg border-4 border-ink bg-panel p-4 shadow-offset-lg {side === 1 ? 'md:order-3' : ''}">
-        <div class="flex items-start justify-between gap-3">
-          <p class="callout text-sm text-paper">Player {side + 1}</p>
-          <p class="callout rounded bg-paper px-2 text-xs">{def.types.join(" / ")}</p>
-        </div>
-        <div class="flex items-center gap-4">
-          <div
-            class="size-20 shrink-0 rounded-full border-4 border-ink"
-            style="background: {hex(def.sprites.color)}"
-            aria-hidden="true"
-          ></div>
-          <div>
-            <h2 class="font-script text-5xl leading-none text-hero [text-shadow:2px_2px_0_var(--paper)]">{def.name}</h2>
-            <p class="mt-1 text-sm font-medium text-ink">{def.blurb}</p>
-          </div>
-        </div>
-        <div class="rounded-md border-[3px] border-ink bg-paper p-3 shadow-offset">
-          <p class="callout text-sm text-hero">{def.passive.name}</p>
-          <p class="text-sm">{def.passive.description}</p>
-          <ul class="mt-2 grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs">
-            {#each Object.values(def.moves) as move (move.name)}
-              <li><span class="font-bold">{move.name}</span> · {move.type}</li>
-            {/each}
-          </ul>
-        </div>
-        <div class="grid grid-cols-[auto_1fr] items-end gap-3 text-sm">
-          <label class="flex flex-col gap-1">
-            <span class="callout text-paper">Fighter</span>
-            <select bind:value={picks[side]} class="rounded border-[3px] border-ink bg-paper px-2 py-1.5 font-semibold">
-              {#each roster as f (f.id)}<option value={f.id}>{f.name}</option>{/each}
-            </select>
-          </label>
-          <BrainSelect bind:value={brains[side]} side={side as 0 | 1} {models} />
-        </div>
-      </article>
-      {#if side === 0}
-        <p class="text-center font-script text-6xl text-hero md:order-2">vs.</p>
-      {/if}
+<main class="absolute inset-0">
+  <DinerDiorama label="The diner, waiting for the bell" mood="dim" spot>
+    {#each [0, 1] as const as side (side)}
+      <section class="corner" class:right={side === 1}>
+        <h2 class="lettering name">{picks[side].name}</h2>
+        <CornerStand def={picks[side]} {side} size={270} />
+        <BrainSelect bind:value={brains[side]} {side} {models} class="brain" />
+      </section>
     {/each}
-  </section>
 
-  <div class="flex flex-col items-center gap-2">
-    <Button onclick={fight} disabled={starting || service === "offline"}>
-      {starting ? "Ringing the bell..." : "Fight!"}
-    </Button>
-    <p class="text-center text-sm" role="status">
-      {#if service === "checking"}
-        Checking the arena service...
-      {:else if service === "offline"}
-        The arena service isn't running. Start everything with <code class="font-bold">bun run dev</code>.
-      {:else if models}
-        {#each MODEL_BRAINS as id, i (id)}
-          {i ? " · " : ""}<span title={models[id].reason ?? ""}>{BRAIN_MODELS[id].name}: <b>{models[id].ready ? "connected" : "offline"}</b></span>
-        {/each}
-      {/if}
-    </p>
-    {#if problem}<p class="callout text-hero" role="alert">{problem}</p>{/if}
-  </div>
+    <img class="vs" src="/ui/vs.webp" alt="versus" />
+
+    <button type="button" class="bell" class:rung={starting} onclick={fight} disabled={service === "offline"}>
+      <img src="/ui/bell.webp" alt="" />
+      <span class="lettering">Ring the bell</span>
+    </button>
+
+    {#if service === "offline"}
+      <p class="lettering note" role="alert">The arena service isn't running. Start it with bun run dev.</p>
+    {:else if problem}
+      <p class="lettering note" role="alert">{problem}</p>
+    {/if}
+  </DinerDiorama>
+
+  <div class="back"><SignButton href="/fighters{setupQuery(picks, brains, page.url.searchParams)}" tone="cream" size="sm">Fighters</SignButton></div>
+  <div class="plan"><SignButton href="/coach{setupQuery(picks, brains, page.url.searchParams)}" tone="cream" size="sm">Game plan</SignButton></div>
 </main>
+
+<style>
+  .back,
+  .plan {
+    position: absolute;
+    top: 26px;
+  }
+  .back { left: 22px; }
+  .plan { right: 22px; }
+  /* Placed in the stage box (1280 x 720); the floor line is at 630. */
+  .corner {
+    position: absolute;
+    left: 33%;
+    top: 196px;
+    width: 340px;
+    margin-left: -170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .corner.right {
+    left: 67%;
+  }
+  .name {
+    margin-bottom: 8px;
+    font-size: 50px;
+    white-space: nowrap;
+  }
+  .corner :global(.brain) {
+    margin-top: 12px;
+  }
+  .vs {
+    position: absolute;
+    left: 50%;
+    top: 250px;
+    width: 180px;
+    margin-left: -90px;
+    filter: drop-shadow(0 8px 6px rgb(10 14 34 / 0.55));
+    animation: thump 1.6s ease-in-out infinite alternate;
+  }
+  .bell {
+    position: absolute;
+    left: 50%;
+    top: 440px;
+    width: 220px;
+    margin-left: -110px;
+    padding: 0;
+    border: 0;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 27px;
+    cursor: pointer;
+  }
+  .bell img {
+    width: 150px;
+    filter: drop-shadow(0 9px 6px rgb(10 14 34 / 0.6));
+    transform-origin: 50% 90%;
+    animation: nudge 2.6s ease-in-out infinite;
+    transition: scale 0.15s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .bell:hover img,
+  .bell:focus-visible img {
+    scale: 1.08;
+  }
+  .bell:active img {
+    scale: 0.94;
+  }
+  .bell.rung img {
+    animation: ring 0.5s ease-in-out infinite;
+  }
+  .bell:disabled {
+    cursor: default;
+    filter: grayscale(0.8) brightness(0.75);
+  }
+  .bell:disabled img {
+    animation: none;
+  }
+  .note {
+    position: absolute;
+    inset: 136px 0 auto;
+    text-align: center;
+    font-size: 22px;
+  }
+  @keyframes thump {
+    from { scale: 0.96; rotate: -2deg; }
+    to { scale: 1.04; rotate: 2deg; }
+  }
+  /* The bell asks to be rung now and then. */
+  @keyframes nudge {
+    0%, 82%, 100% { rotate: 0deg; }
+    86% { rotate: -7deg; }
+    90% { rotate: 6deg; }
+    94% { rotate: -3deg; }
+  }
+  @keyframes ring {
+    0%, 100% { rotate: -12deg; }
+    50% { rotate: 12deg; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vs, .bell img { animation: none; }
+  }
+</style>

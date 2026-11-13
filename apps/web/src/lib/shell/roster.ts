@@ -16,3 +16,7 @@ export function picksFrom(params: Pick<URLSearchParams, "get">): Picks {
 
 export const picksQuery = (picks: readonly [{ id: string }, { id: string }]): string =>
   `?p1=${picks[0].id}&p2=${picks[1].id}`;
+
+/** Artwork lives beside each fighter's atlas, independently of its public name. */
+export const fighterArt = (def: FighterDef, file = "portrait.png"): string | undefined =>
+  def.sprites.sheet?.replace(/[^/]+$/, file);

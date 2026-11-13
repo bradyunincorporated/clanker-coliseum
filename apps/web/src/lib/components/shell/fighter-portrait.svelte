@@ -1,35 +1,41 @@
 <script lang="ts">
-  // Stand-in portrait until the owner's sprites arrive: a paper cut-out on halftone dots.
-  let { color, accent, label = "Art on the way", flip = false, class: className = "" }: {
+  // A fighter's face for the menus. With `src` it shows the fighter's own portrait art;
+  // until a fighter has one, a paper cut-out in the fighter's colours stands in.
+  let { color, accent, src, label = "", flip = false, class: className = "" }: {
     color: string;
     accent: string;
+    src?: string;
     label?: string;
     flip?: boolean;
     class?: string;
   } = $props();
 </script>
 
-<div class="portrait relative overflow-hidden {className}" aria-hidden="true">
-  <svg viewBox="0 0 200 200" class="block size-full" style:transform={flip ? "scaleX(-1)" : undefined}>
-    <circle cx="100" cy="104" r="84" fill="var(--paper)" opacity="0.35" />
-    <g transform="translate(6 6)" fill="var(--ink)" opacity="0.85">
-      <path d="M38 200c0-52 22-84 62-84s62 32 62 84z" />
-      <circle cx="104" cy="74" r="44" />
-    </g>
-    <g stroke="var(--ink)" stroke-width="5" stroke-linejoin="round">
-      <path d="M38 200c0-52 22-84 62-84s62 32 62 84z" fill={color} />
-      <circle cx="104" cy="74" r="44" fill={color} />
-      <path d="M52 200c2-30 12-50 26-60" fill="none" stroke={accent} stroke-width="6" stroke-linecap="round" />
-    </g>
-    <text x="104" y="96" text-anchor="middle" font-size="64" fill="var(--paper)" stroke="var(--ink)" stroke-width="3" paint-order="stroke" style="font-family: var(--font-slab)" transform={flip ? "translate(208 0) scale(-1 1)" : undefined}>?</text>
-  </svg>
-  <p class="callout absolute bottom-2 left-2 -rotate-3 rounded-sm border-2 border-ink bg-mustard px-2 text-[0.65rem]">{label}</p>
+<div class="portrait relative overflow-hidden {className}" style:--tone={color} aria-hidden="true">
+  {#if src}
+    <img {src} alt="" class="size-full object-contain p-2" style:transform={flip ? "scaleX(-1)" : undefined} />
+  {:else}
+    <svg viewBox="0 0 200 200" class="block size-full" style:transform={flip ? "scaleX(-1)" : undefined}>
+      <g transform="translate(5 7)" fill="var(--ink)" opacity="0.55">
+        <path d="M34 204c0-56 24-90 66-90s66 34 66 90z" />
+        <circle cx="104" cy="78" r="48" />
+      </g>
+      <g stroke="var(--ink)" stroke-width="6" stroke-linejoin="round">
+        <path d="M34 204c0-56 24-90 66-90s66 34 66 90z" fill={color} />
+        <circle cx="104" cy="78" r="48" fill={color} />
+        <path d="M50 204c2-32 13-54 28-64" fill="none" stroke={accent} stroke-width="7" stroke-linecap="round" opacity="0.6" />
+      </g>
+      <circle cx="124" cy="70" r="13" fill="var(--paper)" stroke="var(--ink)" stroke-width="5" />
+      <circle cx="129" cy="70" r="5.5" fill="var(--ink)" />
+    </svg>
+    {#if label}<p class="absolute inset-x-0 bottom-2 text-center text-[0.65rem] font-semibold text-paper">{label}</p>{/if}
+  {/if}
 </div>
 
 <style>
   .portrait {
     background:
-      radial-gradient(circle, rgb(43 37 34 / 0.22) 1.5px, transparent 2px) 0 0 / 9px 9px,
-      var(--panel-blue);
+      radial-gradient(circle at 50% 38%, rgb(255 240 200 / 0.5), transparent 62%),
+      color-mix(in oklab, var(--tone) 34%, #24305e);
   }
 </style>

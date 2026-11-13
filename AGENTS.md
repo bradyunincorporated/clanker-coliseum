@@ -16,30 +16,36 @@ are sampled with a seed and are mostly the model's best option; the sim runs on 
 and browsers only watch. Fighters are original creatures. Out of the MVP: character
 creator, live coaching, pre-match filtering.
 
-The look is 1950s-60s billboard advertising with a retro diner mood: cream paper, ink
-outlines, red as the hero colour, flat blue panels, hard offset shadows, script headlines.
-The palette lives in `apps/web/src/routes/layout.css` and `apps/web/src/lib/arena/palette.ts`.
-The owner supplies sprites; until then fighters are drawn in code.
+The look is whimsical cut-paper game art: a watercolour diner at dusk with navy ink
+outlines (owner's direction, 2026-11-13: fun, high-quality game art; the 1950s inspiration
+is for mood, not for forced retro lettering). It is a video game, not a website: every
+screen is a full-bleed painted scene, controls are painted props (plank signs, a menu card,
+a service bell, podiums, a chalkboard) and plain web chrome stays out. Lettering is Lilita
+One for display and Fredoka for text. The palette lives in `apps/web/src/routes/layout.css`
+and `apps/web/src/lib/arena/palette.ts`. The art is AI-generated (Gemini image models) and
+lives in `apps/web/static/{title,ui,hud,arena/diner}`. The owner supplies fighter sprites;
+until then fighters are drawn in code.
 
-There is one arena, the diner at dusk. It is built like a paper theatre (owner's direction,
-2026-11-13): flat cut-paper plates with inked edges and mottled watercolour fills, stacked
-back to front, each casting a shadow on the one behind and moving at its own parallax speed.
-Its palette adds dark blue, cyan, sea green and rustic brown to the billboard colours. The
-plates are in `apps/web/static/arena/diner` and the site's version of the stage is
-`apps/web/src/lib/components/shell/diner-diorama.svelte`.
+There is one arena, the diner at dusk, built like a paper theatre: flat painted plates
+stacked back to front (`apps/web/src/lib/components/shell/diner-diorama.svelte`). Scenery
+never covers the fighters (owner's rule, 2026-11-13): there is no foreground plate, and the
+fight canvas is always the top layer.
 
-Site pages: `/` landing, `/fighters` select, `/coach` game plan (a stub that changes
-nothing yet), `/arena` stage and HUD with no fight, `/match` the live-match lobby, and
-`/match/<id>` the live match. The live match is one PixiJS canvas (fighters, effects and
-scoreboard) drawn over the diorama's `overlay` slot with the camera held still, so sim
-positions line up with the painted floor; the floor line is 87.5% down the frame.
+Site pages: `/` title screen, `/fighters` select, `/coach` game plan (a stub that changes
+nothing yet), `/arena` the empty stage, `/match` the versus lobby, and `/match/<id>` the
+live match. The live match fills the whole window: the diorama is the stage and one
+transparent PixiJS canvas over it draws fighters, effects and the painted HUD (health bars,
+alarm-clock timer, banners), with the camera held still so sim positions line up with the
+painted floor. Menu buttons there are two quiet icons in a corner. Empty hooks wait for the
+fighter-art owner: a trainer slot per corner on `/fighters`, coach corners on the match
+screen, and `coachCall(side, callId)` in `apps/web/src/lib/shell/coach-calls.ts`.
 
-No scrolling, anywhere (owner's rule, 2026-11-13): it is a video game, so every page fits one
-landscape frame. `apps/web/src/lib/components/shell/game-frame.svelte` lays the site out in
-design units (at least 1280 x 720) and scales it to fill the window; the room under the
-header is about 1280 x 660. Build each page to fit that room. Size aspect-locked things from
-the room with `cqh`; never use `vw`/`vh` or anything that adds a scrollbar. The frame shrinks
-an over-tall page as a safety net, but a page that needs shrinking is a page to fix.
+No scrolling, anywhere (owner's rule, 2026-11-13): every page fits one landscape frame.
+`apps/web/src/lib/components/shell/game-frame.svelte` lays the site out in design units (at
+least 1280 x 720) and scales it to fill the window, with no header. Scenes are composed in
+a 1280 x 720 stage box (`stageOrigin` in `apps/web/src/lib/arena/coords.ts`; the floor line
+is 630 down) and the plates bleed past it to cover any window shape. Never use `vw`/`vh` or
+anything that adds a scrollbar. Check screens at 1920 x 1080.
 
 ## Boundaries
 

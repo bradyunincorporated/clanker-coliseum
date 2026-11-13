@@ -1,70 +1,114 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { Button } from "#lib/components/ui/button/index.js";
-  import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
-  import BrainSelect from "#lib/components/shell/brain-select.svelte";
-  import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
-  import { cssColor, picksFrom } from "#lib/shell/roster.js";
+  import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
+  import SignButton from "#lib/components/ui/sign-button.svelte";
+  import { brainsFrom, setupQuery } from "#lib/shell/brains.js";
+  import { picksFrom } from "#lib/shell/roster.js";
 
   const picks = $derived(picksFrom(page.url.searchParams));
+  // The brains picked at fighter select ride through in the query.
+  const brains = $derived(brainsFrom(page.url.searchParams));
 
-  // The brains picked on the fighter page; this one choice does reach the fight.
-  let brains = $state<Brains>(brainsFrom(page.url.searchParams));
-
-  // Suggestion chips, not open text. The orders don't reach the fight yet.
+  // Suggestions, not open text. The orders don't reach the fight yet.
   const plans = ["Rush in", "Keep your distance", "Wait and counter", "Dealer's choice"];
   let plan = $state<[string, string]>([plans[3], plans[3]]);
 </script>
 
 <svelte:head><title>The game plan</title></svelte:head>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-3">
-  <header class="text-center">
-    <p class="callout text-sm tracking-[0.3em] text-bottle">Step two</p>
-    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)]">The game plan</h1>
-    <p class="callout mx-auto mt-2 inline-block -rotate-1 rounded-sm border-[3px] border-dashed border-hero px-4 py-1 text-sm text-hero">
-      Preview only: the orders don't change the fight yet
-    </p>
-  </header>
-
-  <section class="grid gap-6 md:grid-cols-2">
-    {#each picks as def, side (side)}
-      <article class="rounded-lg border-4 border-ink bg-paper shadow-offset-lg">
-        <div class="flex items-center gap-4 border-b-4 border-ink bg-panel px-4 py-3">
-          <FighterPortrait color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} label="" flip={side === 1} class="size-20 shrink-0 rounded-full border-[3px] border-ink" />
-          <div>
-            <p class="callout text-sm text-paper">{side === 0 ? "Left corner" : "Right corner"}</p>
-            <h2 class="font-script text-5xl leading-none text-hero [text-shadow:2px_2px_0_var(--paper)]">{def.name}</h2>
-          </div>
-        </div>
-
-        <div class="flex flex-col gap-3 p-4">
+<main class="absolute inset-0">
+  <DinerDiorama label="The diner with the house lights down" mood="dim">
+    <section class="board">
+      <h1>The game plan</h1>
+      <div class="sides">
+        {#each picks as def, side (side)}
           <fieldset>
-            <legend class="font-slab text-lg uppercase">Coach's orders</legend>
-            <div class="mt-2 flex flex-wrap gap-2">
-              {#each plans as option (option)}
-                <label class="cursor-pointer">
-                  <input type="radio" class="peer sr-only" name="plan-{side}" value={option} bind:group={plan[side]} />
-                  <span class="block rounded-full border-[3px] border-ink bg-paper-deep px-4 py-1.5 text-sm font-bold transition-colors peer-checked:bg-teal peer-checked:text-paper peer-focus-visible:outline-3 peer-focus-visible:outline-hero">{option}</span>
-                </label>
-              {/each}
-            </div>
+            <legend>{def.name}</legend>
+            {#each plans as option (option)}
+              <label>
+                <input type="radio" class="sr-only" name="plan-{side}" value={option} bind:group={plan[side]} />
+                <span>{option}</span>
+              </label>
+            {/each}
           </fieldset>
+        {/each}
+      </div>
+      <p class="small">Chalk talk only for now: orders don't change the fight yet.</p>
+    </section>
+  </DinerDiorama>
 
-          <BrainSelect bind:value={brains[side]} side={side as 0 | 1} class="self-start" />
-
-          <!-- Coach callout in a hand-drawn red bubble outline. -->
-          <p class="relative self-start rounded-[2rem_2rem_2rem_0.4rem] border-[3px] border-hero px-5 py-3 font-medium">
-            <span class="callout text-hero">Coach says:</span>
-            "{plan[side]}, {def.name}!"
-          </p>
-        </div>
-      </article>
-    {/each}
-  </section>
-
-  <div class="flex flex-wrap items-center justify-center gap-4">
-    <Button href="/fighters{setupQuery(picks, brains)}" variant="secondary">Back</Button>
-    <Button href="/arena{setupQuery(picks, brains)}" size="lg">To the arena</Button>
-  </div>
+  <div class="absolute top-[26px] left-[22px]"><SignButton href="/match{setupQuery(picks, brains, page.url.searchParams)}" tone="cream" size="sm">Back</SignButton></div>
 </main>
+
+<style>
+  /* Placed in the stage box (1280 x 720). The chalkboard's slate starts about 9% in from its frame. */
+  .board {
+    position: absolute;
+    left: 50%;
+    top: 136px;
+    width: 800px;
+    height: 442px;
+    margin-left: -400px;
+    padding: 62px 96px 84px;
+    background: url("/ui/chalkboard.webp") center / 100% 100% no-repeat;
+    color: #f3efe2;
+    font-family: var(--font-display);
+    text-align: center;
+    filter: drop-shadow(0 12px 9px rgb(10 14 34 / 0.6));
+  }
+  h1 {
+    font-size: 40px;
+    line-height: 1;
+    rotate: -1.5deg;
+  }
+  .sides {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 18px;
+  }
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    border: 0;
+  }
+  legend {
+    margin: 0 auto 6px;
+    font-size: 27px;
+    color: var(--mustard);
+  }
+  label {
+    cursor: pointer;
+  }
+  label span {
+    display: block;
+    padding: 1px 16px;
+    font-size: 21px;
+    opacity: 0.6;
+    border: 3px solid transparent;
+    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    transition: opacity 0.15s;
+  }
+  label:hover span {
+    opacity: 0.9;
+  }
+  /* The chosen order gets a chalk ring. */
+  input:checked + span {
+    opacity: 1;
+    border-color: #f3efe2;
+    rotate: -1deg;
+  }
+  input:focus-visible + span {
+    outline: 3px solid var(--mustard);
+    outline-offset: 3px;
+  }
+  .small {
+    margin-top: 16px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+</style>

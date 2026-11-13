@@ -69,8 +69,22 @@ export function brainsFrom(params: Pick<URLSearchParams, "get">): Brains {
   return [at("b1"), at("b2")];
 }
 
-/** The whole pre-match setup as a query string: both fighters and both brains. */
+/** Setup that other screens own and every screen passes along untouched. */
+const CARRIED = ["trainer1", "trainer2"] as const;
+
+/**
+ * The whole pre-match setup as a query string: both fighters and both brains, plus the
+ * trainer picks (`trainer1`, `trainer2`) carried over from `from` when it has them.
+ */
 export const setupQuery = (
   picks: readonly [{ id: string }, { id: string }],
   brains: Readonly<Brains>,
-): string => `${picksQuery(picks)}&b1=${brains[0]}&b2=${brains[1]}`;
+  from?: Pick<URLSearchParams, "get">,
+): string => {
+  let query = `${picksQuery(picks)}&b1=${brains[0]}&b2=${brains[1]}`;
+  for (const key of CARRIED) {
+    const value = from?.get(key);
+    if (value) query += `&${key}=${encodeURIComponent(value)}`;
+  }
+  return query;
+};

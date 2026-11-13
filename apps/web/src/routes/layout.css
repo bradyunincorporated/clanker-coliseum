@@ -1,28 +1,28 @@
 @import "tailwindcss";
-@import "@fontsource/yellowtail";
-@import "@fontsource/alfa-slab-one";
-@import "@fontsource-variable/archivo/standard.css";
-@import "@fontsource-variable/archivo/standard-italic.css";
+@import "@fontsource/lilita-one";
+@import "@fontsource-variable/fredoka/wght.css";
 
 /*
- * 1950s billboard advertising (see the project's STYLE-NOTES.md): cream paper, ink lines,
- * red as the hero colour for whatever matters most, flat sky-blue panels, hard offset
- * shadows. Script for headlines, a chunky slab for labels, a condensed italic for callouts.
+ * A cut-paper diner at dusk: painted plates, inked navy edges, warm lamp light. The art is
+ * generated and lives in /static; these tokens only tint the type and the few drawn shapes
+ * so they sit on the same sheet. Pixi has the same values in lib/arena/palette.ts.
  */
 :root {
-  color-scheme: light;
-  --paper: #f3e9d2;
-  --paper-deep: #e8dabb;
-  --ink: #2b2522;
-  --hero-red: #d7322a;
-  --warm-orange: #e8742c;
-  --bottle-green: #2f6b3f;
-  --sky: #8fb3c9;
-  --panel-blue: #5fa8c4;
-  --teal: #3fa7a0;
+  color-scheme: dark;
+  --paper: #f6ecd4;
+  --paper-deep: #e6d6b0;
+  --ink: #1b2140;
+  --hero-red: #d8392f;
+  --warm-orange: #ee8a3c;
+  --bottle-green: #3f8f72;
+  --sky: #9fb4dc;
+  --panel-blue: #5f79b8;
+  --teal: #33a9a4;
   --mint: #bfe3cf;
   --navy: #141b33;
-  --mustard: #e2b33c;
+  --night: #0c1126;
+  --mustard: #edb93c;
+  --wood: #7a4b2c;
 }
 
 @theme inline {
@@ -37,19 +37,19 @@
   --color-teal: var(--teal);
   --color-mint: var(--mint);
   --color-navy: var(--navy);
+  --color-night: var(--night);
   --color-mustard: var(--mustard);
-  --font-script: "Yellowtail", cursive;
-  --font-slab: "Alfa Slab One", serif;
-  --font-sans: "Archivo Variable", system-ui, sans-serif;
-  --shadow-offset: 4px 4px 0 var(--ink);
-  --shadow-offset-lg: 7px 7px 0 var(--ink);
+  --color-wood: var(--wood);
+  --font-display: "Lilita One", "Fredoka Variable", system-ui, sans-serif;
+  --font-sans: "Fredoka Variable", system-ui, sans-serif;
 }
 
 @layer base {
   html {
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--night);
+    color: var(--paper);
     font-family: var(--font-sans);
+    font-weight: 500;
   }
   /* A video game, not a document: one landscape frame, never a scrollbar. */
   html,
@@ -60,33 +60,36 @@
   }
   body {
     margin: 0;
-    /* Paper grain: two soft noise layers, no image file. */
-    background:
-      radial-gradient(circle at 20% 10%, rgb(255 255 255 / 0.35), transparent 40%),
-      radial-gradient(circle at 80% 90%, rgb(232 116 44 / 0.08), transparent 45%), var(--paper);
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+  }
+  img {
+    -webkit-user-drag: none;
+  }
+  ::selection {
+    background: var(--mustard);
+    color: var(--ink);
   }
   :focus-visible {
-    outline: 3px solid var(--hero-red);
-    outline-offset: 3px;
+    outline: 3px solid var(--mustard);
+    outline-offset: 4px;
+    border-radius: 6px;
   }
 }
 
-@utility callout {
-  font-family: var(--font-sans);
-  font-style: italic;
-  font-weight: 800;
-  font-stretch: 75%;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+/* Lettering that sits straight on the painted scene: cream fill, inked navy edge. */
+@utility lettering {
+  font-family: var(--font-display);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.22em var(--ink);
+  text-shadow: 0 0.09em 0 var(--ink);
 }
 
-/* Diagonal candy stripes behind gauges and along page edges (packaging-collage look). */
-@utility stripes-red {
-  background: repeating-linear-gradient(-45deg, var(--paper) 0 8px, var(--hero-red) 8px 16px);
-}
-
-/* A tagline ribbon with notched ends. */
-@utility ribbon {
-  clip-path: polygon(0 0, 100% 0, calc(100% - 0.9em) 50%, 100% 100%, 0 100%, 0.9em 50%);
-  padding-inline: 2em;
+/* Paper lifting off the plate behind it: every cut piece drops a soft shadow. */
+@utility lift {
+  filter: drop-shadow(0 5px 5px rgb(10 14 34 / 0.5));
 }

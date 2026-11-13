@@ -1,81 +1,76 @@
 <script lang="ts">
-  import { Button } from "#lib/components/ui/button/index.js";
-  import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
-  import Starburst from "#lib/components/shell/starburst.svelte";
-  import { ROSTER, cssColor } from "#lib/shell/roster.js";
+  import { goto } from "$app/navigation";
+  import SignButton from "#lib/components/ui/sign-button.svelte";
+  import TitleScene from "#lib/components/shell/title-scene.svelte";
   import { SITE_NAME } from "#lib/site.js";
 
-  const [left, right] = [ROSTER[0], ROSTER[1] ?? ROSTER[0]];
-  const steps = [
-    { n: "1", title: "Pick two clankers", body: "Choose who stands in each corner of the diner." },
-    { n: "2", title: "Set the game plan", body: "Give each fighter's machine brain a nudge before the bell." },
-    { n: "3", title: "Watch them go", body: "Forty seconds, one decision a second. You only watch." },
-  ];
+  function onKey(e: KeyboardEvent) {
+    if (e.code === "Enter" || e.code === "Space") void goto("/fighters");
+  }
 </script>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4">
-  <section class="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
-    <div class="flex flex-col items-start gap-4">
-      <p class="callout text-sm tracking-[0.3em] text-bottle">Tonight only · live at the diner</p>
-      <h1 class="font-script text-[5.75rem] leading-[0.85] text-hero drop-shadow-[5px_5px_0_var(--ink)]">
-        {SITE_NAME}
-      </h1>
-      <p class="callout ribbon bg-ink py-1.5 text-lg text-paper">The fight that thinks for itself!</p>
-      <p class="max-w-md text-lg font-medium">
-        Two creature fighters. Forty seconds on the clock. A machine brain calls every move, once a second, and
-        all you do is pull up a stool and watch.
-      </p>
-      <div class="flex flex-wrap items-center gap-4 pt-2">
-        <Button href="/fighters" size="lg">Pick your clankers</Button>
-        <Button href="/arena" variant="secondary">See the arena</Button>
-      </div>
-    </div>
+<svelte:window onkeydown={onKey} />
 
-    <div class="relative mx-auto w-full max-w-md">
-      <div class="relative rotate-1 rounded-lg border-4 border-ink bg-panel p-5 shadow-offset-lg">
-        <p class="callout mb-3 border-b-[3px] border-ink pb-2 text-center text-paper">
-          On the bill tonight
-        </p>
-        <div class="grid grid-cols-[1fr_auto_1fr] items-end gap-2">
-          <figure>
-            <FighterPortrait color={cssColor(left.sprites.color)} accent={cssColor(left.sprites.accent)} class="aspect-square rounded border-[3px] border-ink" />
-            <figcaption class="mt-1 text-center font-script text-3xl text-paper [text-shadow:2px_2px_0_var(--ink)]">{left.name}</figcaption>
-          </figure>
-          <p class="pb-12 font-script text-5xl text-hero [text-shadow:2px_2px_0_var(--paper)]">vs.</p>
-          <figure>
-            <FighterPortrait color={cssColor(right.sprites.color)} accent={cssColor(right.sprites.accent)} flip class="aspect-square rounded border-[3px] border-ink" />
-            <figcaption class="mt-1 text-center font-script text-3xl text-paper [text-shadow:2px_2px_0_var(--ink)]">{right.name}</figcaption>
-          </figure>
-        </div>
-      </div>
-      <div class="absolute -top-12 -right-4 -rotate-12 sm:-right-10">
-        <Starburst class="size-32">
-          <span class="font-slab text-4xl text-hero">40</span><br />
-          <span class="callout text-xs">seconds!</span>
-        </Starburst>
-      </div>
-      <div class="absolute -bottom-6 -left-3 -rotate-3 rounded border-[3px] border-ink bg-paper px-4 py-2 shadow-offset">
-        <p class="callout text-sm text-hero">Best of one.</p>
-        <p class="text-sm font-semibold">No rematches, no excuses.</p>
-      </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="how" class="rounded-lg border-4 border-ink bg-paper-deep shadow-offset-lg">
-    <h2 id="how" class="callout stripes-red border-b-4 border-ink px-5 py-2 text-xl">
-      <span class="rounded-sm bg-paper px-3 py-0.5">How it works</span>
-    </h2>
-    <ol class="grid gap-px bg-ink md:grid-cols-3">
-      {#each steps as step (step.n)}
-        <li class="flex gap-4 bg-paper px-5 py-3">
-          <span class="grid size-12 shrink-0 place-items-center rounded-full border-[3px] border-ink bg-teal font-slab text-2xl text-paper">{step.n}</span>
-          <div>
-            <h3 class="font-slab text-lg uppercase">{step.title}</h3>
-            <p class="text-sm font-medium">{step.body}</p>
-          </div>
-        </li>
-      {/each}
-    </ol>
-  </section>
-
+<main class="absolute inset-0">
+  <TitleScene>
+    <h1 class="logo">
+      <img src="/title/logo.webp" alt={SITE_NAME} />
+    </h1>
+    <nav class="menu" aria-label="Main menu">
+      <SignButton href="/fighters" size="lg">Play</SignButton>
+      <SignButton href="/arena" tone="cream" size="sm">See the arena</SignButton>
+    </nav>
+  </TitleScene>
 </main>
+
+<style>
+  .logo {
+    position: absolute;
+    left: 50%;
+    top: 3.5%;
+    width: 540px;
+    margin: 0 0 0 -270px;
+    filter: drop-shadow(0 12px 9px rgb(12 17 38 / 0.5));
+    animation:
+      drop 0.9s cubic-bezier(0.25, 1.4, 0.4, 1) backwards,
+      bob 5s 0.9s ease-in-out infinite alternate;
+  }
+  .logo img {
+    display: block;
+    width: 100%;
+    /* The marquee bulbs breathe. */
+    animation: bulbs 1.8s ease-in-out infinite alternate;
+  }
+  .menu {
+    position: absolute;
+    inset: auto 0 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: rise 0.6s 0.55s cubic-bezier(0.2, 1, 0.3, 1) backwards;
+  }
+  @keyframes drop {
+    from {
+      translate: 0 -120%;
+      rotate: -7deg;
+    }
+  }
+  @keyframes bob {
+    from { translate: 0 0; rotate: -0.6deg; }
+    to { translate: 0 7px; rotate: 0.6deg; }
+  }
+  @keyframes bulbs {
+    from { filter: brightness(0.97); }
+    to { filter: brightness(1.08) drop-shadow(0 0 10px rgb(255 206 96 / 0.55)); }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 40px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .logo, .logo img, .menu { animation: none; }
+  }
+</style>

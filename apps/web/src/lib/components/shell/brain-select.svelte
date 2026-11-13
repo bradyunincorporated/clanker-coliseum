@@ -4,8 +4,9 @@
   import { BRAIN_CARDS, brainCard } from "#lib/shell/brains.js";
 
   /**
-   * One fighter's brain: a compact dropdown with the maker's logo, the official model id and
-   * a "powered by" line. Each fighter has its own; nothing here is shared between corners.
+   * One fighter's brain, picked like a jukebox selection: step through the options with the
+   * arrows. Shows the maker's logo where there is an official one, the official model id and
+   * the "powered by" line. Each fighter has its own; nothing is shared between corners.
    */
   interface Props {
     value: BrainKind;
@@ -18,26 +19,105 @@
 
   const card = $derived(brainCard(value));
   const down = $derived(isModelBrain(value) && models ? !models[value].ready : false);
+
+  function step(by: number) {
+    const at = BRAIN_CARDS.findIndex((b) => b.id === value);
+    value = BRAIN_CARDS[(at + by + BRAIN_CARDS.length) % BRAIN_CARDS.length].id;
+  }
 </script>
 
-<label class="brain flex items-center gap-2 rounded-md border-[3px] border-ink bg-paper px-2 py-1.5 shadow-offset {className}">
-  <span class="grid size-9 shrink-0 place-items-center rounded-sm border-2 border-ink bg-white p-1" aria-hidden="true">
-    {#if card.logo}
-      <img src={card.logo} alt="" class="max-h-full max-w-full object-contain" />
-    {:else}
-      <span class="font-slab text-lg leading-none">{card.label[0]}</span>
-    {/if}
-  </span>
-  <span class="flex min-w-0 flex-1 flex-col">
-    <span class="callout text-[0.65rem] leading-none text-bottle">Brain · player {side + 1}</span>
-    <select bind:value class="w-full min-w-0 cursor-pointer truncate bg-transparent text-sm leading-tight font-bold outline-none focus-visible:outline-2 focus-visible:outline-hero" name="brain-{side}">
-      {#each BRAIN_CARDS as b (b.id)}
-        <option value={b.id}>{b.label}{b.modelId ? ` — ${b.modelId}` : ""}</option>
-      {/each}
-    </select>
-    <span class="flex items-baseline gap-2 leading-none whitespace-nowrap">
-      <span class="font-script text-base leading-none text-hero">{card.tagline}</span>
-      {#if down}<span class="callout truncate text-[0.65rem] text-hero" title={isModelBrain(value) ? models?.[value].reason : ""}>offline · heuristic fills in</span>{/if}
-    </span>
-  </span>
-</label>
+<div class="brain {className}" role="group" aria-label="Brain for player {side + 1}">
+  <button type="button" class="step" onclick={() => step(-1)} aria-label="Previous brain">
+    <img src="/ui/arrow.webp" alt="" />
+  </button>
+  <div class="plate" aria-live="polite">
+    {#if card.logo}<img class="logo" src={card.logo} alt="" />{/if}
+    <p class="text">
+      <span class="name">{card.label}</span>
+      <span class="sub" title={down && isModelBrain(value) ? models?.[value].reason : undefined}>
+        {#if down}offline, the heuristic fills in{:else}{card.modelId ? `${card.modelId} · ` : ""}{card.tagline}{/if}
+      </span>
+    </p>
+  </div>
+  <button type="button" class="step next" onclick={() => step(1)} aria-label="Next brain">
+    <img src="/ui/arrow.webp" alt="" />
+  </button>
+</div>
+
+<style>
+  .brain {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    width: 340px;
+  }
+  .plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    flex: 1;
+    min-width: 0;
+    height: 62px;
+    padding: 0 26px;
+    background: url("/ui/sign-teal.webp") center / 100% 100% no-repeat;
+    filter: drop-shadow(0 5px 4px rgb(10 14 34 / 0.55));
+  }
+  .logo {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    object-fit: contain;
+    padding: 3px;
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    text-align: center;
+    line-height: 1.05;
+  }
+  .name {
+    font-family: var(--font-display);
+    font-size: 19px;
+    color: var(--paper);
+    text-shadow: 0 2px 0 rgb(16 74 82 / 0.9);
+    white-space: nowrap;
+  }
+  .sub {
+    overflow: hidden;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #06323a;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .step {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    filter: drop-shadow(0 3px 3px rgb(10 14 34 / 0.55));
+    transition: scale 0.15s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .step img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .step.next img {
+    scale: -1 1;
+  }
+  .step:hover,
+  .step:focus-visible {
+    scale: 1.18;
+  }
+  .step:active {
+    scale: 0.92;
+  }
+</style>
