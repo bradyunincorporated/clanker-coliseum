@@ -34,6 +34,7 @@ import {
   type CoachCallRequest,
   type Coaching,
   type MatchSummary,
+  type MatchReport,
   type PickInfo,
   type SideCoaching,
   type StartMatchRequest,
@@ -73,6 +74,7 @@ interface LiveMatch {
   defs: [FighterDef, FighterDef];
   state: MatchState;
   last: TickMessage | null;
+  decisions: MatchReport["decisions"];
   events: FightEvent[];
   listeners: Set<Listener>;
   coach: [SideCoach, SideCoach];
@@ -91,6 +93,7 @@ export class Matches extends Context.Service<
   {
     readonly start: (req: StartMatchRequest) => Effect.Effect<MatchSummary, MatchSetupError>;
     readonly list: () => MatchSummary[];
+    readonly report: (id: string) => MatchReport | null;
     /**
      * A coach's call for one side. Accepted only for a live match, a preset that side can be
      * given right now, and a side that is off cooldown. Every watcher hears an accepted call.
@@ -222,6 +225,7 @@ export class Matches extends Context.Service<
                 coaching: coaching(m),
               };
               m.last = message;
+              m.decisions.push({ tick: result.state.tick, picks: resolved });
               broadcast(m, message);
               if (m.state.over) break;
               picks = yield* nextPicks(m, brains, m.summary.tickMs);
@@ -286,6 +290,7 @@ export class Matches extends Context.Service<
                 defs,
                 state: createMatch(defs, DEFAULT_CONFIG),
                 last: null,
+                decisions: [],
                 events: [],
                 listeners: new Set(),
                 coach: [
@@ -300,6 +305,10 @@ export class Matches extends Context.Service<
               yield* Effect.forkDetach(run(m));
               return summary;
             }),
+          report: (id) => {
+            const m = matches.get(id);
+            return m ? { match: m.summary, over: m.state.over, decisions: m.decisions } : null;
+          },
           list: () => [...matches.values()].map((m) => m.summary).reverse(),
           coach: (id, req) =>
             Effect.gen(function* () {

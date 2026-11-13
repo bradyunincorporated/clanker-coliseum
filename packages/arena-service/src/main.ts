@@ -53,6 +53,14 @@ export async function serve(port: number) {
         );
         return result;
       }
+      const report = /^\/api\/matches\/([\w-]+)\/report$/.exec(path);
+      if (report && req.method === "GET") {
+        const data = matches.report(report[1]);
+        return Response.json(data ?? { error: "This match report has expired." }, {
+          status: data ? 200 : 404,
+          headers: { "cache-control": "no-store" },
+        });
+      }
       const coach = /^\/api\/matches\/([\w-]+)\/coach$/.exec(path);
       if (coach && req.method === "POST") {
         const body = (await req.json().catch(() => null)) as CoachCallRequest | null;

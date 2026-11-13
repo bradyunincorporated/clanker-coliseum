@@ -179,3 +179,10 @@ export interface HealthResponse {
   ok: true;
   models: Record<ModelBrain, ModelStatus>;
 }
+
+/** Compact decision history retained for the match's Backstage screen. */
+export interface MatchReport {
+  match: MatchSummary;
+  over: boolean;
+  decisions: { tick: number; picks: [PickInfo, PickInfo] }[];
+}

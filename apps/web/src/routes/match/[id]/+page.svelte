@@ -58,6 +58,7 @@
     </div>
   {:else if over}
     <div class="result absolute inset-x-0 bottom-3 flex items-center justify-center gap-4">
+      <SignButton href="/match/{data.id}/backstage{page.url.search}" tone="cream" size="sm">Backstage</SignButton>
       <SignButton href="/match{page.url.search}" size="sm">Rematch</SignButton>
       <SignButton href="/fighters{page.url.search}" tone="cream" size="sm">New fighters</SignButton>
     </div>
