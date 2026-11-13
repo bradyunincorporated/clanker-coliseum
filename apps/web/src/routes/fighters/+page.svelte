@@ -79,7 +79,7 @@
         <p class="blurb">{def.blurb}</p>
         <h3>{def.passive.name}</h3>
         <p class="passive">{def.passive.description}</p>
-        <h4>Moves</h4>
+        <h4><span>Moves</span><span>Power</span></h4>
         <ul>
           {#each Object.values(def.moves) as move (move.name)}
             <li style:--type={typeInk(move.type)}>
@@ -232,6 +232,8 @@
     line-height: 1.1;
   }
   .card h4 {
+    display: flex;
+    justify-content: space-between;
     margin-top: 12px;
     padding-top: 9px;
     border-top: 2px dotted rgb(27 33 64 / 0.4);
