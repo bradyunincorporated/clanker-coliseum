@@ -1,0 +1,19 @@
+{
+  "page": "https://pokemondb.net/sprites/scyther",
+  "generation": 5,
+  "variant": "normal",
+  "assets": [
+    {
+      "url": "https://img.pokemondb.net/sprites/black-white/anim/back-normal/scyther.gif",
+      "file": "back.gif"
+    },
+    {
+      "url": "https://img.pokemondb.net/sprites/black-white/anim/normal/scyther.gif",
+      "file": "front.gif"
+    },
+    {
+      "url": "https://img.pokemondb.net/sprites/black-white/normal/scyther.png",
+      "file": "front.png"
+    }
+  ]
+}

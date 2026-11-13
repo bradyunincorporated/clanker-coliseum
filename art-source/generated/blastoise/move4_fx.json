@@ -1,0 +1,33 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of two powerful parallel horizontal blue-white water jets blasting RIGHT, white foam tips and cyan spray. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+  "references": [
+    "art-source/references/blastoise/guide.png"
+  ],
+  "usage": {
+    "total_tokens": 4259,
+    "total_input_tokens": 1273,
+    "input_tokens_by_modality": [
+      {
+        "modality": "image",
+        "tokens": 1120
+      },
+      {
+        "modality": "text",
+        "tokens": 153
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 2129,
+    "output_tokens_by_modality": [
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 857,
+    "initial_input_tokens": 1273
+  },
+  "interaction_id": "v1_Chd6SXYzYXZlTUo1X2ZvZEFQczZPUHdBRRIXekl2M2F2ZU1KNV9mb2RBUHM2T1B3QUU"
+}

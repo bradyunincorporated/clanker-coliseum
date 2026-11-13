@@ -1,0 +1,146 @@
+[
+  {
+    "fighter": "blastoise",
+    "name": "move2_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of translucent blue concentric water rings bursting horizontally RIGHT, white cyan foam and droplets. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/blastoise/guide.png"
+    ],
+    "destination": "art-source/generated/blastoise/move2_fx.png"
+  },
+  {
+    "fighter": "blastoise",
+    "name": "move3_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a low horizontal aqua crescent sweeping RIGHT with scattered white water droplets. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/blastoise/guide.png"
+    ],
+    "destination": "art-source/generated/blastoise/move3_fx.png"
+  },
+  {
+    "fighter": "blastoise",
+    "name": "move4_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of two powerful parallel horizontal blue-white water jets blasting RIGHT, white foam tips and cyan spray. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/blastoise/guide.png"
+    ],
+    "destination": "art-source/generated/blastoise/move4_fx.png"
+  },
+  {
+    "fighter": "blastoise",
+    "name": "portrait",
+    "prompt": "Create a polished character-selection portrait of Blastoise, stocky blue turtle Pokemon, cream segmented belly, brown shell with cream rim, two metallic water cannons above shoulders, short ears, exactly two arms and two legs. Strictly match the attached Generation 5 reference for identity, coloring and anatomy. Head and upper torso, expressive three-quarter view facing RIGHT. Beautiful crisp Pokemon pixel art with purposeful color clusters and strong dark outline. Coarse roughly 128x128 logical pixels enlarged. Keep ears, head and visible wings entirely in frame with comfortable margins. Plain warm cream RGB(243,233,210) background. No text, frames, props or other characters.",
+    "references": [
+      "art-source/references/blastoise/guide.png"
+    ],
+    "destination": "art-source/generated/blastoise/portrait.png"
+  },
+  {
+    "fighter": "raichu",
+    "name": "move2_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of jagged branching bright yellow-white lightning striking RIGHT, amber zigzag outer arcs. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/raichu/guide.png"
+    ],
+    "destination": "art-source/generated/raichu/move2_fx.png"
+  },
+  {
+    "fighter": "raichu",
+    "name": "move3_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a low sharp silver-white crescent slash sweeping RIGHT with cold blue edge sparkles. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/raichu/guide.png"
+    ],
+    "destination": "art-source/generated/raichu/move3_fx.png"
+  },
+  {
+    "fighter": "raichu",
+    "name": "move4_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of an oval yellow-white electric aura with an empty center for a diving mouse, long lightning trails streaming LEFT. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/raichu/guide.png"
+    ],
+    "destination": "art-source/generated/raichu/move4_fx.png"
+  },
+  {
+    "fighter": "raichu",
+    "name": "portrait",
+    "prompt": "Create a polished character-selection portrait of Kantonian Raichu, orange electric mouse Pokemon, cream belly, brown feet, long thin dark tail ending in one yellow lightning bolt, curled brown and yellow ears, yellow cheeks. Exactly two arms and two legs. Preserve the full tail. Strictly match the attached Generation 5 reference for identity, coloring and anatomy. Head and upper torso, expressive three-quarter view facing RIGHT. Beautiful crisp Pokemon pixel art with purposeful color clusters and strong dark outline. Coarse roughly 128x128 logical pixels enlarged. Keep ears, head and visible wings entirely in frame with comfortable margins. Plain warm cream RGB(243,233,210) background. No text, frames, props or other characters.",
+    "references": [
+      "art-source/references/raichu/guide.png"
+    ],
+    "destination": "art-source/generated/raichu/portrait.png"
+  },
+  {
+    "fighter": "scyther",
+    "name": "move2_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a pale cyan-white horizontal wind slash sweeping RIGHT, sharp crescent air trails. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/scyther/guide.png"
+    ],
+    "destination": "art-source/generated/scyther/move2_fx.png"
+  },
+  {
+    "fighter": "scyther",
+    "name": "move3_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a low horizontal ivory-white blade arc sweeping RIGHT with a pale green edge. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/scyther/guide.png"
+    ],
+    "destination": "art-source/generated/scyther/move3_fx.png"
+  },
+  {
+    "fighter": "scyther",
+    "name": "move4_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of two crossed luminous ivory and green blade slashes making an X, cutting toward RIGHT. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/scyther/guide.png"
+    ],
+    "destination": "art-source/generated/scyther/move4_fx.png"
+  },
+  {
+    "fighter": "scyther",
+    "name": "portrait",
+    "prompt": "Create a polished character-selection portrait of Scyther, green mantis Pokemon, angular green head, cream abdomen, two ivory curved scythe forearms, exactly two clawed feet, two thin translucent wings behind back. The scythes are its forearms, never handheld swords. Strictly match the attached Generation 5 reference for identity, coloring and anatomy. Head and upper torso, expressive three-quarter view facing RIGHT. Beautiful crisp Pokemon pixel art with purposeful color clusters and strong dark outline. Coarse roughly 128x128 logical pixels enlarged. Keep ears, head and visible wings entirely in frame with comfortable margins. Plain warm cream RGB(243,233,210) background. No text, frames, props or other characters.",
+    "references": [
+      "art-source/references/scyther/guide.png"
+    ],
+    "destination": "art-source/generated/scyther/portrait.png"
+  },
+  {
+    "fighter": "hitmonlee",
+    "name": "move2_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a curved ivory-white roundhouse kick speed arc aimed RIGHT, ochre impact accents. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/hitmonlee/guide.png"
+    ],
+    "destination": "art-source/generated/hitmonlee/move2_fx.png"
+  },
+  {
+    "fighter": "hitmonlee",
+    "name": "move3_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a very low thin ivory crescent sweep toward RIGHT with sparse tan dust specks. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/hitmonlee/guide.png"
+    ],
+    "destination": "art-source/generated/hitmonlee/move3_fx.png"
+  },
+  {
+    "fighter": "hitmonlee",
+    "name": "move4_fx",
+    "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a sharp diagonal up-RIGHT white and gold kick impact burst with a short tapered motion trail. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+    "references": [
+      "art-source/references/hitmonlee/guide.png"
+    ],
+    "destination": "art-source/generated/hitmonlee/move4_fx.png"
+  },
+  {
+    "fighter": "hitmonlee",
+    "name": "portrait",
+    "prompt": "Create a polished character-selection portrait of Hitmonlee, tan brown oval-bodied fighting Pokemon, eyes set in dark triangular sockets directly in torso, no mouth and no separate head, exactly two arms and two long segmented spring-like legs with three-toed feet. Strictly match the attached Generation 5 reference for identity, coloring and anatomy. Head and upper torso, expressive three-quarter view facing RIGHT. Beautiful crisp Pokemon pixel art with purposeful color clusters and strong dark outline. Coarse roughly 128x128 logical pixels enlarged. Keep ears, head and visible wings entirely in frame with comfortable margins. Plain warm cream RGB(243,233,210) background. No text, frames, props or other characters.",
+    "references": [
+      "art-source/references/hitmonlee/guide.png"
+    ],
+    "destination": "art-source/generated/hitmonlee/portrait.png"
+  }
+]

@@ -1,0 +1,169 @@
+{
+  "id": "blastoise",
+  "name": "Blastoise",
+  "types": [
+    "water"
+  ],
+  "sprites": {
+    "sheet": "/fighters/blastoise/blastoise.json",
+    "animations": {
+      "idle": "idle",
+      "walkForward": "walkForward",
+      "walkBack": "walkBack",
+      "jump": "jump",
+      "jumpForward": "jumpForward",
+      "crouch": "crouch",
+      "block": "block",
+      "crouchBlock": "crouchBlock",
+      "hitstun": "hitstun",
+      "blockstun": "blockstun",
+      "knockdown": "knockdown",
+      "stagger": "stagger",
+      "ko": "ko",
+      "victory": "victory"
+    },
+    "loops": {
+      "idle": 12500
+    },
+    "moves": {
+      "move1": {
+        "windup": "move1_windup",
+        "strike": "move1_strike",
+        "recover": "move1_recover"
+      },
+      "move2": {
+        "windup": "move2_windup",
+        "strike": "move2_strike",
+        "recover": "move2_recover"
+      },
+      "move3": {
+        "windup": "move3_windup",
+        "strike": "move3_strike",
+        "recover": "move3_recover"
+      },
+      "move4": {
+        "windup": "move4_windup",
+        "strike": "move4_strike",
+        "recover": "move4_recover"
+      }
+    },
+    "effects": {
+      "move2": {
+        "animation": "move2_fx",
+        "linger": 6
+      },
+      "move3": {
+        "animation": "move3_fx",
+        "linger": 6
+      },
+      "move4": {
+        "animation": "move4_fx",
+        "linger": 6
+      }
+    },
+    "anchor": {
+      "x": 0.5,
+      "y": 0.9
+    },
+    "scale": 0.5,
+    "color": 5084105,
+    "accent": 15980960
+  },
+  "artGuides": {
+    "status": "Suggested alignment and preview timings. Gameplay balance requires tuning.",
+    "hurtboxes": {
+      "standing": [
+        {
+          "x": -48,
+          "y": 0,
+          "w": 96,
+          "h": 70
+        },
+        {
+          "x": -55,
+          "y": 60,
+          "w": 110,
+          "h": 80
+        },
+        {
+          "x": -38,
+          "y": 125,
+          "w": 76,
+          "h": 40
+        }
+      ],
+      "crouching": [
+        {
+          "x": -60,
+          "y": 0,
+          "w": 120,
+          "h": 45
+        },
+        {
+          "x": -58,
+          "y": 35,
+          "w": 116,
+          "h": 70
+        }
+      ],
+      "airborne": [
+        {
+          "x": -50,
+          "y": 25,
+          "w": 100,
+          "h": 130
+        }
+      ]
+    },
+    "moves": {
+      "move1": {
+        "name": "Bite",
+        "startup": 5,
+        "active": 4,
+        "recovery": 14,
+        "hitbox": {
+          "x": 35,
+          "y": 90,
+          "w": 65,
+          "h": 50
+        }
+      },
+      "move2": {
+        "name": "Water Pulse",
+        "startup": 14,
+        "active": 10,
+        "recovery": 27,
+        "hitbox": {
+          "x": 45,
+          "y": 65,
+          "w": 140,
+          "h": 85
+        }
+      },
+      "move3": {
+        "name": "Aqua Tail",
+        "startup": 12,
+        "active": 6,
+        "recovery": 25,
+        "hitbox": {
+          "x": 15,
+          "y": 0,
+          "w": 155,
+          "h": 45
+        }
+      },
+      "move4": {
+        "name": "Hydro Pump",
+        "startup": 20,
+        "active": 10,
+        "recovery": 28,
+        "hitbox": {
+          "x": 55,
+          "y": 85,
+          "w": 140,
+          "h": 65
+        }
+      }
+    }
+  }
+}

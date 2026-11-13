@@ -1,0 +1,454 @@
+{
+  "frames": [
+    {
+      "frame": "idle_original_000.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_001.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_002.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_003.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_004.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_005.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_006.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_007.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_008.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_009.png",
+      "durationMs": 100
+    },
+    {
+      "frame": "idle_original_010.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_011.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_012.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_013.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_014.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_015.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_016.png",
+      "durationMs": 100
+    },
+    {
+      "frame": "idle_original_017.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_018.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_019.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_020.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_021.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_022.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_023.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_024.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_025.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_026.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_027.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_028.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_029.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_030.png",
+      "durationMs": 100
+    },
+    {
+      "frame": "idle_original_031.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_032.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_033.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_034.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_035.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_036.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_037.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_038.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_039.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_040.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_041.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_042.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_043.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_044.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_045.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_046.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_047.png",
+      "durationMs": 100
+    },
+    {
+      "frame": "idle_original_048.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_049.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_050.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_051.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_052.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_053.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_054.png",
+      "durationMs": 150
+    },
+    {
+      "frame": "idle_original_055.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_056.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_057.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_058.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_059.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_060.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_061.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_062.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_063.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_064.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_065.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_066.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_067.png",
+      "durationMs": 100
+    },
+    {
+      "frame": "idle_original_068.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_069.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_070.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_071.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_072.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_073.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_074.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_075.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_076.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_077.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_078.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_079.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_080.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_081.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_082.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_083.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_084.png",
+      "durationMs": 150
+    },
+    {
+      "frame": "idle_original_085.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_086.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_087.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_088.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_089.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_090.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_091.png",
+      "durationMs": 100
+    },
+    {
+      "frame": "idle_original_092.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_093.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_094.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_095.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_096.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_097.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_098.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_099.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_100.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_101.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_102.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_103.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_104.png",
+      "durationMs": 150
+    },
+    {
+      "frame": "idle_original_105.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_106.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_107.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_108.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_109.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_110.png",
+      "durationMs": 50
+    },
+    {
+      "frame": "idle_original_111.png",
+      "durationMs": 50
+    }
+  ],
+  "durationMs": 6200,
+  "loop": true
+}

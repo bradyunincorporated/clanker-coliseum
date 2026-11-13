@@ -1,0 +1,33 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of a pale cyan-white horizontal wind slash sweeping RIGHT, sharp crescent air trails. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+  "references": [
+    "art-source/references/scyther/guide.png"
+  ],
+  "usage": {
+    "total_tokens": 3906,
+    "total_input_tokens": 1270,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 150
+      },
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 2012,
+    "output_tokens_by_modality": [
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 624,
+    "initial_input_tokens": 1270
+  },
+  "interaction_id": "v1_Chc2WXYzYXM2Y0hzdS1vZEFQOVlDM3lRaxIXNll2M2FzNmNIc3Utb2RBUDlZQzN5UWs"
+}
