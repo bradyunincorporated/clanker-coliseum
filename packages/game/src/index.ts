@@ -7,3 +7,4 @@ export * from "./ai/actions.js";
 export * from "./ai/rng.js";
 export * from "./ai/brains.js";
 export * from "./ai/decision-request.js";
+export * from "./fighters/hurtboxes.js";

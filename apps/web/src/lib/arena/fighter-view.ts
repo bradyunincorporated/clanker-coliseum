@@ -4,15 +4,17 @@
 // frame chosen from the sim's actionFrame so the art stays in lockstep with the hitboxes.
 
 import { AnimatedSprite, Assets, Container, Graphics, Spritesheet, Texture } from "pixi.js";
-import { FRAMES_PER_TICK, type FighterDef, type FighterFrame, type Rect } from "@clanker/game";
+import { type FighterDef, type FighterFrame, type Rect } from "@clanker/game";
 import { INK, PAPER } from "./palette.js";
 import { toScreen } from "./coords.js";
+import { chooseEffect, choosePose, frameAt } from "./sprite-pose.js";
 
 export class FighterView extends Container {
   private shadow = new Graphics();
   private body = new Graphics();
   private sprite: AnimatedSprite | null = null;
   private sheet: Spritesheet | null = null;
+  private effect: AnimatedSprite | null = null;
   private lastStatus: FighterFrame["status"] = "normal";
   private flash = 0;
   private disposed = false;
@@ -42,6 +44,7 @@ export class FighterView extends Container {
     this.lastStatus = f.status;
     if (this.flash > 0) this.flash--;
     this.drawShadow(f);
+    this.drawEffect(f);
     if (this.sprite && this.sheet && this.drawSprite(f)) {
       this.body.clear();
       return;
@@ -64,28 +67,55 @@ export class FighterView extends Container {
   }
 
   private drawSprite(f: FighterFrame): boolean {
-    const anims = this.def.sprites.animations ?? {};
-    const key = f.status === "normal" ? f.action : f.status;
-    const name = anims[key];
-    const textures = name ? this.sheet?.animations[name] : undefined;
     const sp = this.sprite;
-    if (!textures || !sp) {
+    const pose = choosePose(this.def, f);
+    const textures = pose ? this.sheet?.animations[pose.animation] : undefined;
+    if (!pose || !textures || !sp) {
       if (sp) sp.visible = false;
       return false;
     }
     sp.visible = true;
     if (sp.textures !== textures) sp.textures = textures;
-    sp.gotoAndStop(
-      Math.min(
-        textures.length - 1,
-        Math.floor((f.actionFrame / FRAMES_PER_TICK) * textures.length),
-      ),
-    );
-    const p = toScreen(f.x, f.y);
+    sp.gotoAndStop(frameAt(pose.progress, textures.length));
+    // The sprite's anchor is the fighter's ground point; per-pose offsets nudge the exceptions.
+    const nudge = this.def.sprites.offsets?.[pose.key];
+    const p = toScreen(f.x + f.facing * (nudge?.x ?? 0), f.y + (nudge?.y ?? 0));
     sp.position.set(p.x, p.y);
     sp.scale.x = Math.abs(sp.scale.x) * f.facing;
     sp.tint = this.flash > 0 ? 0xffb0a8 : 0xffffff;
     return true;
+  }
+
+  /** Effect art rides on the move's hitbox, whether the fighter itself is art or placeholder. */
+  private drawEffect(f: FighterFrame) {
+    const choice = this.sheet ? chooseEffect(this.def, f) : null;
+    const textures = choice ? this.sheet?.animations[choice.effect.animation] : undefined;
+    if (!choice || !textures) {
+      if (this.effect) this.effect.visible = false;
+      return;
+    }
+    if (!this.effect) {
+      this.effect = new AnimatedSprite(textures);
+      this.effect.anchor.set(0.5);
+    }
+    const fx = this.effect;
+    const { effect, move } = choice;
+    // Behind the fighter's art or in front of it.
+    const index = effect.behind ? 1 : this.children.length;
+    if (fx.parent !== this) this.addChildAt(fx, Math.min(index, this.children.length));
+    else this.setChildIndex(fx, Math.min(index, this.children.length - 1));
+    fx.visible = true;
+    if (fx.textures !== textures) fx.textures = textures;
+    fx.gotoAndStop(frameAt(choice.progress, textures.length));
+    const hb = move.hitbox;
+    const p = toScreen(
+      f.x + f.facing * (hb.x + hb.w / 2 + (effect.offset?.x ?? 0)),
+      f.y + hb.y + hb.h / 2 + (effect.offset?.y ?? 0),
+    );
+    fx.position.set(p.x, p.y);
+    const scale = effect.scale ?? this.def.sprites.scale ?? 1;
+    fx.scale.set(scale * f.facing, scale);
+    fx.alpha = choice.alpha;
   }
 
   private drawBody(f: FighterFrame) {

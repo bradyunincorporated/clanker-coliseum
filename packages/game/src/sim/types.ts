@@ -143,21 +143,70 @@ export interface FighterStats {
   defense: number;
 }
 
+/** Anything a fighter can be shown doing: its action, or a status that overrides the pose. */
+export type PoseKey = ActionId | ForcedAction | "hitstun" | "blockstun" | "ko" | "victory";
+
 /**
- * Sprite hooks. Every field is optional: the renderer draws colored boxes when art is missing,
+ * A move's art, tied to the move's real frame data instead of a fixed timeline. Each value is
+ * an animation name in the sheet (one frame or several). `strike` shows on exactly the frames
+ * the hitbox is live; `windup` covers startup and `recover` covers recovery, each spread over
+ * that phase however long it is. After the move ends the idle animation shows.
+ */
+export interface MovePoses {
+  windup: string;
+  strike: string;
+  recover: string;
+}
+
+/**
+ * Art drawn with a move's hitbox (flames, a shadow burst). It is only a picture: it never
+ * changes what the move hits, and it travels with the fighter, not on its own.
+ */
+export interface MoveEffect {
+  /** Animation name in the fighter's sheet, drawn facing right. Spread over the frames it shows. */
+  animation: string;
+  /**
+   * Which frames show it. active (default): exactly while the hitbox is live.
+   * startup+active: it builds up before the hit.
+   */
+  during?: "active" | "startup+active";
+  /** Sim frames it stays on screen after the hitbox ends, frozen on its last frame and fading. */
+  linger?: number;
+  /** Nudge from the hitbox centre, world units (x forward, y up). */
+  offset?: { x: number; y: number };
+  /** Defaults to the fighter's sprite scale. */
+  scale?: number;
+  /** Draw behind the fighter instead of in front. */
+  behind?: boolean;
+}
+
+/**
+ * Sprite hooks. Every field is optional: the renderer draws a placeholder when art is missing,
  * so sprites can drop in one action at a time.
  */
 export interface SpriteSpec {
   /** Path to a spritesheet JSON (TexturePacker / Aseprite "hash" or "array" format) loadable by PixiJS Assets. */
   sheet?: string;
-  /** Animation name inside the sheet for each action. */
-  animations?: Partial<
-    Record<ActionId | ForcedAction | "hitstun" | "blockstun" | "ko" | "victory", string>
-  >;
-  /** Anchor/scale tweaks so art lines up with the hurtboxes. */
+  /** Animation name inside the sheet for each action. Spread evenly over the 60-frame tick. */
+  animations?: Partial<Record<PoseKey, string>>;
+  /** Phase-aware art per move. A move listed here ignores its entry in `animations`. */
+  moves?: Partial<Record<MoveSlot, MovePoses>>;
+  /** Effect art drawn with a move's hitbox. */
+  effects?: Partial<Record<MoveSlot, MoveEffect>>;
+  /**
+   * Where the fighter's ground point sits in every cell, as a fraction of the cell: x is the
+   * body's centre line, y is the floor line. Default (0.5, 1) = feet on the bottom edge. Put
+   * the floor line higher (for example y = 0.9) to leave room below it for knockdown poses,
+   * tails, or a creature that floats above the floor.
+   */
   anchor?: { x: number; y: number };
   scale?: number;
-  /** Placeholder tint used for the box renderer (and portrait backgrounds later). */
+  /**
+   * Per-pose nudges in world units (x forward, y up) for poses that can't share the ground
+   * point, such as a knockdown that should lie further back.
+   */
+  offsets?: Partial<Record<PoseKey, { x: number; y: number }>>;
+  /** Placeholder colours used when art is missing. */
   color: number;
   accent: number;
 }

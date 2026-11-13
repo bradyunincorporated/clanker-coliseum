@@ -408,6 +408,17 @@ export class ArenaRenderer {
   private drawDebug(snap: FrameSnapshot) {
     const g = this.debug.clear();
     if (!this.showBoxes) return;
+    // Floor line and each fighter's ground point: what sprite anchors must line up with.
+    const floor = toScreen(0, 0).y;
+    g.moveTo(0, floor).lineTo(VIEW_W, floor).stroke({ color: INK, width: 1, alpha: 0.6 });
+    for (const f of snap.fighters) {
+      const o = toScreen(f.x, f.y);
+      g.moveTo(o.x - 8, o.y)
+        .lineTo(o.x + 8, o.y)
+        .moveTo(o.x, o.y - 8)
+        .lineTo(o.x, o.y + 8);
+      g.stroke({ color: INK, width: 2 });
+    }
     for (const f of snap.fighters) {
       for (const r of f.hurtboxes) rectPath(g, r).stroke({ color: 0x2f6b3f, width: 2, alpha: 0.9 });
       if (f.hitbox)
