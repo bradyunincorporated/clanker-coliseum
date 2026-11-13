@@ -1,5 +1,6 @@
 <script lang="ts">
   import "./layout.css";
+  import GameFrame from "#lib/components/shell/game-frame.svelte";
   import SiteHeader from "#lib/components/shell/site-header.svelte";
   import { SITE_NAME } from "#lib/site.js";
 
@@ -10,5 +11,7 @@
   <title>{SITE_NAME}</title>
 </svelte:head>
 
-<SiteHeader />
-{@render children()}
+<GameFrame>
+  {#snippet header()}<SiteHeader />{/snippet}
+  {@render children()}
+</GameFrame>

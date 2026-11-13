@@ -15,8 +15,9 @@
 
 <svelte:window onkeydown={onKey} />
 
-<main class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6">
-  <div class="flex flex-wrap items-center justify-between gap-3">
+<!-- The stage is 16:9, so its width comes from the room's height (toolbar and padding take ~90px). -->
+<main class="mx-auto flex w-[min(72rem,calc((100cqh-90px)*16/9))] flex-col gap-3 py-3">
+  <div class="flex items-center justify-between gap-3">
     <Button href="/match" variant="secondary" size="sm">Back to the lobby</Button>
     <p class="callout text-sm" role="status">
       {#if problem}
@@ -29,19 +30,16 @@
         Live · decided on the server, one tick a second
       {/if}
     </p>
-    <label class="flex items-center gap-2 text-sm font-semibold">
-      <input type="checkbox" bind:checked={showBoxes} class="size-4 accent-hero" />
-      Hitboxes (H)
-    </label>
+    <div class="flex items-center gap-4">
+      <label class="flex items-center gap-2 text-sm font-semibold">
+        <input type="checkbox" bind:checked={showBoxes} class="size-4 accent-hero" />
+        Hitboxes (H)
+      </label>
+      {#if status?.over}<Button href="/match" size="sm">Rematch</Button>{/if}
+    </div>
   </div>
 
   {#key data.id}
     <ArenaStage matchId={data.id} {showBoxes} onstatus={(s) => (status = s)} onproblem={(m) => (problem = m)} />
   {/key}
-
-  {#if status?.over}
-    <div class="flex justify-center">
-      <Button href="/match" size="lg">Rematch</Button>
-    </div>
-  {/if}
 </main>

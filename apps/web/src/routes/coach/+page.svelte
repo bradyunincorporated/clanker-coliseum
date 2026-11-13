@@ -15,11 +15,11 @@
 
 <svelte:head><title>The game plan</title></svelte:head>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
+<main class="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-3">
   <header class="text-center">
     <p class="callout text-sm tracking-[0.3em] text-bottle">Step two</p>
-    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)] sm:text-7xl">The game plan</h1>
-    <p class="callout mx-auto mt-4 inline-block -rotate-1 rounded-sm border-[3px] border-dashed border-hero px-4 py-1 text-sm text-hero">
+    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)]">The game plan</h1>
+    <p class="callout mx-auto mt-2 inline-block -rotate-1 rounded-sm border-[3px] border-dashed border-hero px-4 py-1 text-sm text-hero">
       Preview only: these choices don't change the fight yet
     </p>
   </header>
@@ -27,7 +27,7 @@
   <section class="grid gap-6 md:grid-cols-2">
     {#each picks as def, side (side)}
       <article class="rounded-lg border-4 border-ink bg-paper shadow-offset-lg">
-        <div class="flex items-center gap-4 border-b-4 border-ink bg-panel p-4">
+        <div class="flex items-center gap-4 border-b-4 border-ink bg-panel px-4 py-3">
           <FighterPortrait color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} label="" flip={side === 1} class="size-20 shrink-0 rounded-full border-[3px] border-ink" />
           <div>
             <p class="callout text-sm text-paper">{side === 0 ? "Left corner" : "Right corner"}</p>
@@ -35,7 +35,7 @@
           </div>
         </div>
 
-        <div class="flex flex-col gap-5 p-5">
+        <div class="flex flex-col gap-3 p-4">
           <fieldset>
             <legend class="font-slab text-lg uppercase">Coach's orders</legend>
             <div class="mt-2 flex flex-wrap gap-2">

@@ -11,7 +11,8 @@
 
 <svelte:head><title>The arena</title></svelte:head>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-6 sm:px-6">
+<!-- The stage is 16:9, so its width comes from the room's height: scoreboard and footer take ~210px. -->
+<main class="mx-auto w-[min(72rem,calc((100cqh-210px)*16/9))] py-3">
   <div class="overflow-hidden rounded-lg border-4 border-ink bg-paper shadow-offset-lg">
     <!-- HUD placeholders: full health, full clock. Nothing is simulated on this page. -->
     <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-b-4 border-ink bg-paper px-3 py-2 sm:gap-5 sm:px-5">
@@ -41,20 +42,11 @@
       <Standee name={picks[1].name} color={cssColor(picks[1].sprites.color)} x={70} flip />
     </DinerDiorama>
 
-    <div class="flex flex-wrap items-center justify-between gap-2 border-t-4 border-ink bg-ink px-4 py-2 text-paper">
-      <p class="callout text-sm">Round 1 · best of one</p>
-      <p class="callout ribbon bg-hero py-0.5 text-sm">Move call-outs land here</p>
-      <p class="callout text-sm">The diner · dusk</p>
+    <div class="flex items-center justify-between gap-3 border-t-4 border-ink bg-ink px-4 py-2 text-paper">
+      <Button href="/coach{picksQuery(picks)}" variant="secondary" size="sm">Back</Button>
+      <p class="callout text-sm">Stage and scoreboard only · the fight runs on the match page</p>
+      <Button href="/match{picksQuery(picks)}" size="sm">To the match</Button>
     </div>
   </div>
 
-  <p class="text-center text-sm font-medium">
-    Stage and scoreboard only: the fight itself runs on the match page. Move your mouse across the stage to shift the camera.
-  </p>
-
-  <div class="flex flex-wrap items-center justify-center gap-4">
-    <Button href="/coach{picksQuery(picks)}" variant="secondary">Back</Button>
-    <Button href="/fighters{picksQuery(picks)}" variant="secondary">Change fighters</Button>
-    <Button href="/match{picksQuery(picks)}" size="lg">To the match</Button>
-  </div>
 </main>

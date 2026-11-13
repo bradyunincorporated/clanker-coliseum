@@ -13,11 +13,11 @@
   ];
 </script>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-10 sm:px-6">
+<main class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4">
   <section class="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
-    <div class="flex flex-col items-start gap-5">
+    <div class="flex flex-col items-start gap-4">
       <p class="callout text-sm tracking-[0.3em] text-bottle">Tonight only · live at the diner</p>
-      <h1 class="font-script text-[clamp(4.5rem,13vw,9rem)] leading-[0.85] text-hero drop-shadow-[5px_5px_0_var(--ink)]">
+      <h1 class="font-script text-[5.75rem] leading-[0.85] text-hero drop-shadow-[5px_5px_0_var(--ink)]">
         {SITE_NAME}
       </h1>
       <p class="callout ribbon bg-ink py-1.5 text-lg text-paper">The fight that thinks for itself!</p>
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="relative mx-auto w-full max-w-lg">
+    <div class="relative mx-auto w-full max-w-md">
       <div class="relative rotate-1 rounded-lg border-4 border-ink bg-panel p-5 shadow-offset-lg">
         <p class="callout mb-3 border-b-[3px] border-ink pb-2 text-center text-paper">
           On the bill tonight
@@ -67,7 +67,7 @@
     </h2>
     <ol class="grid gap-px bg-ink md:grid-cols-3">
       {#each steps as step (step.n)}
-        <li class="flex gap-4 bg-paper p-5">
+        <li class="flex gap-4 bg-paper px-5 py-3">
           <span class="grid size-12 shrink-0 place-items-center rounded-full border-[3px] border-ink bg-teal font-slab text-2xl text-paper">{step.n}</span>
           <div>
             <h3 class="font-slab text-lg uppercase">{step.title}</h3>
@@ -78,5 +78,4 @@
     </ol>
   </section>
 
-  <p class="text-center font-script text-3xl text-bottle">Fresh fights served daily... and so refreshing!</p>
 </main>

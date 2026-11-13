@@ -73,7 +73,8 @@ export class ArenaRenderer {
       // The diner diorama behind the canvas is the stage.
       backgroundAlpha: 0,
       antialias: true,
-      resolution: Math.min(2, window.devicePixelRatio || 1),
+      // The frame is scaled up to fill big windows, so never render below 2x.
+      resolution: Math.min(3, Math.max(2, window.devicePixelRatio || 1)),
       autoDensity: true,
     });
     if (this.destroyed) {
