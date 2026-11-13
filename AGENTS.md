@@ -18,7 +18,20 @@ creator, live coaching, pre-match filtering.
 The look is 1950s-60s billboard advertising with a retro diner mood: cream paper, ink
 outlines, red as the hero colour, flat blue panels, hard offset shadows, script headlines.
 The palette lives in `apps/web/src/routes/layout.css` and `apps/web/src/lib/arena/palette.ts`.
-The owner supplies sprites; until then fighters and the stage are drawn in code.
+The owner supplies sprites; until then fighters are drawn in code.
+
+There is one arena, the diner at dusk. It is built like a paper theatre (owner's direction,
+2026-11-13): flat cut-paper plates with inked edges and mottled watercolour fills, stacked
+back to front, each casting a shadow on the one behind and moving at its own parallax speed.
+Its palette adds dark blue, cyan, sea green and rustic brown to the billboard colours. The
+plates are in `apps/web/static/arena/diner` and the site's version of the stage is
+`apps/web/src/lib/components/shell/diner-diorama.svelte`.
+
+Site pages: `/` landing, `/fighters` select, `/coach` game plan (a stub that changes
+nothing yet), `/arena` stage and HUD with no fight, `/match` the live-match lobby, and
+`/match/<id>` the live match. The live match is one PixiJS canvas (fighters, effects and
+scoreboard) drawn over the diorama's `overlay` slot with the camera held still, so sim
+positions line up with the painted floor; the floor line is 87.5% down the frame.
 
 ## Boundaries
 

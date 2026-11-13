@@ -18,9 +18,8 @@ import type {
   PickInfo,
   TickMessage,
 } from "@clanker/arena-service/protocol";
-import { DinerStage } from "./diner-stage.js";
 import { FighterView } from "./fighter-view.js";
-import { FLOOR_Y, toScreen, VIEW_H, VIEW_W } from "./coords.js";
+import { toScreen, VIEW_H, VIEW_W } from "./coords.js";
 import { HERO_RED, INK, MUSTARD, PANEL_BLUE, PAPER, PAPER_DEEP } from "./palette.js";
 import { TickPlayback } from "./playback.js";
 
@@ -36,7 +35,6 @@ export interface ArenaStatus {
 
 export class ArenaRenderer {
   private readonly app = new Application();
-  private readonly stage = new DinerStage();
   private readonly world = new Container();
   private readonly debug = new Graphics();
   private readonly fx = new Container();
@@ -72,7 +70,8 @@ export class ArenaRenderer {
     await this.app.init({
       width: VIEW_W,
       height: VIEW_H,
-      background: PAPER,
+      // The diner diorama behind the canvas is the stage.
+      backgroundAlpha: 0,
       antialias: true,
       resolution: Math.min(2, window.devicePixelRatio || 1),
       autoDensity: true,
@@ -85,7 +84,7 @@ export class ArenaRenderer {
     this.app.canvas.style.height = "100%";
     host.appendChild(this.app.canvas);
     this.world.addChild(this.debug);
-    this.app.stage.addChild(this.stage, this.world, this.fx, this.hud);
+    this.app.stage.addChild(this.world, this.fx, this.hud);
     this.buildHud();
     this.app.ticker.add((t) => this.frame(t.deltaMS));
     this.ready = true;
@@ -212,9 +211,9 @@ export class ArenaRenderer {
         lineHeight: 21,
       }),
     });
-    log.position.set(56, FLOOR_Y + 40);
+    log.position.set(56, VIEW_H - 70);
     const logPanel = new Graphics()
-      .roundRect(40, FLOOR_Y + 30, 640, 84, 8)
+      .roundRect(40, VIEW_H - 78, 640, 72, 8)
       .fill({ color: INK, alpha: 0.82 });
 
     this.hud.addChild(
@@ -265,7 +264,6 @@ export class ArenaRenderer {
     }
     this.drawDebug(snap);
     this.drawHud(snap, tick, defs);
-    this.stage.update(dtMs);
     this.animateFx(dtMs);
 
     const state = tick?.result.state ?? this.opening;
@@ -332,7 +330,6 @@ export class ArenaRenderer {
         word.rotation = -0.12;
         spark.addChild(g, word);
         this.shake = Math.min(16, 4 + (e.damage ?? 0) * 0.7);
-        if (big) this.stage.flareNeon(0.8);
         if ((e.effectiveness ?? 1) > 1) this.tagline("Super effective!", p.x, p.y - 80, HERO_RED);
         else if ((e.effectiveness ?? 1) < 1)
           this.tagline("Not very effective...", p.x, p.y - 80, 0x5b524b);
@@ -361,7 +358,6 @@ export class ArenaRenderer {
         name ? `${name.toUpperCase()} WINS` : "A DRAW",
         600_000,
       );
-      this.stage.flareNeon(1.5);
     }
   }
 
@@ -430,6 +426,9 @@ export class ArenaRenderer {
 
   private drawHud(snap: FrameSnapshot, tick: TickMessage | null, defs: [FighterDef, FighterDef]) {
     const g = this.bars.clear();
+    // Scoreboard band: cream paper so the ink type reads over the dusk sky.
+    g.rect(0, 0, VIEW_W, 128).fill({ color: PAPER, alpha: 0.95 });
+    g.rect(0, 126, VIEW_W, 4).fill(INK);
     for (const i of [0, 1] as const) {
       const f = snap.fighters[i];
       const pct = Math.max(0, f.hp / defs[i].stats.maxHp);
