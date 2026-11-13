@@ -35,6 +35,6 @@ chart x1.2 / x0.8 (immunities also x0.8), STAB x1.1. Knockdowns cost one tick.
 ## Adding a fighter or its sprites
 
 Copy a file in `packages/game/src/fighters`, change the id and list it in `index.ts`.
-Sprites are optional per fighter: set `sprites.sheet` to a PixiJS spritesheet JSON and
-`sprites.animations` to a map from action (`idle`, `walkForward`, `move1`, `hitstun`, `ko`
-and so on) to an animation name in the sheet. Anything missing is drawn as a placeholder.
+Sprites are optional per fighter; anything missing is drawn as a placeholder. The full
+contract (poses, cell size, ground point, phase-timed move art, effect overlays, hurtbox
+layouts) is in `docs/FIGHTER-SPEC.md`.
