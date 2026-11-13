@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { BrainKind, HealthResponse } from "@clanker/arena-service/protocol";
   import { isModelBrain } from "@clanker/arena-service/protocol";
-  import { BRAIN_CARDS, brainCard } from "#lib/shell/brains.js";
+  import { BRAIN_OPTIONS, brainCard } from "#lib/shell/brains.js";
 
   /**
    * One fighter's brain, picked like a jukebox selection: step through the options with the
@@ -21,8 +21,8 @@
   const down = $derived(isModelBrain(value) && models ? !models[value].ready : false);
 
   function step(by: number) {
-    const at = BRAIN_CARDS.findIndex((b) => b.id === value);
-    value = BRAIN_CARDS[(at + by + BRAIN_CARDS.length) % BRAIN_CARDS.length].id;
+    const at = Math.max(0, BRAIN_OPTIONS.findIndex((b) => b.id === value));
+    value = BRAIN_OPTIONS[(at + by + BRAIN_OPTIONS.length) % BRAIN_OPTIONS.length].id;
   }
 </script>
 

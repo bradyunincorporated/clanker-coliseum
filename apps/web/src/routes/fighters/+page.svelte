@@ -131,8 +131,13 @@
     gap: 8px;
     margin-bottom: 6px;
   }
+  /* Nudged toward the middle so its outer arrow stays clear of the coach row. */
   .corner :global(.brain) {
     margin-top: 10px;
+    translate: 44px 0;
+  }
+  .corner.right :global(.brain) {
+    translate: -44px 0;
   }
   .arrow {
     flex: none;
@@ -179,16 +184,20 @@
     right: 8px;
     rotate: 2deg;
   }
+  /* The coach row needs 350px to lay out four sprites evenly; shown a little smaller so it
+     stays inside its corner, clear of the podium and the brain sign. */
   .trainer {
     position: absolute;
-    left: 14px;
-    top: 572px;
-    width: 250px;
-    height: 136px;
+    left: 10px;
+    top: 588px;
+    width: 350px;
+    scale: 0.82;
+    transform-origin: 0 0;
   }
   .trainer.right {
     left: auto;
-    right: 14px;
+    right: 10px;
+    transform-origin: 100% 0;
   }
   .types {
     font-family: var(--font-display);

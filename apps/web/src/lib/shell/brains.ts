@@ -55,6 +55,9 @@ export const BRAIN_CARDS: BrainCard[] = BRAIN_KINDS.map((id) => {
   };
 });
 
+/** What a player can pick: the three models. The house brains stay as fallbacks only. */
+export const BRAIN_OPTIONS: BrainCard[] = BRAIN_CARDS.filter((b) => isModelBrain(b.id));
+
 export const brainCard = (id: BrainKind): BrainCard =>
   BRAIN_CARDS.find((b) => b.id === id) ?? BRAIN_CARDS[0];
 
