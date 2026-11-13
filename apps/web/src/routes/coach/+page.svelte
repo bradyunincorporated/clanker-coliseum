@@ -2,16 +2,19 @@
   import { page } from "$app/state";
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
   import SignButton from "#lib/components/ui/sign-button.svelte";
+  import { GAME_PLANS, GAME_PLAN_IDS } from "@clanker/game";
   import { brainsFrom, setupQuery } from "#lib/shell/brains.js";
+  import { plansFrom, withPlans, type Plans } from "#lib/shell/coach-setup.js";
   import { picksFrom } from "#lib/shell/roster.js";
 
   const picks = $derived(picksFrom(page.url.searchParams));
   // The brains picked at fighter select ride through in the query.
   const brains = $derived(brainsFrom(page.url.searchParams));
 
-  // Suggestions, not open text. The orders don't reach the fight yet.
-  const plans = ["Rush in", "Keep your distance", "Wait and counter", "Dealer's choice"];
-  let plan = $state<[string, string]>([plans[3], plans[3]]);
+  // Presets, not open text. Each side's order rides in the query (`g1`, `g2`) to the lobby,
+  // which hands it to the service; it then stands for the whole fight.
+  let plan = $state<Plans>(plansFrom(page.url.searchParams));
+  const carried = $derived(withPlans(page.url.searchParams, plan));
 </script>
 
 <svelte:head><title>The game plan</title></svelte:head>
@@ -24,20 +27,20 @@
         {#each picks as def, side (side)}
           <fieldset>
             <legend>{def.name}</legend>
-            {#each plans as option (option)}
+            {#each GAME_PLAN_IDS as id (id)}
               <label>
-                <input type="radio" class="sr-only" name="plan-{side}" value={option} bind:group={plan[side]} />
-                <span>{option}</span>
+                <input type="radio" class="sr-only" name="plan-{side}" value={id} bind:group={plan[side]} />
+                <span>{GAME_PLANS[id].label}</span>
               </label>
             {/each}
           </fieldset>
         {/each}
       </div>
-      <p class="small">Chalk talk only for now: orders don't change the fight yet.</p>
+      <p class="small">Standing orders for the whole fight. Shout calls once the bell rings.</p>
     </section>
   </DinerDiorama>
 
-  <div class="absolute top-[26px] left-[22px]"><SignButton href="/match{setupQuery(picks, brains, page.url.searchParams)}" tone="cream" size="sm">Back</SignButton></div>
+  <div class="absolute top-[26px] left-[22px]"><SignButton href="/match{setupQuery(picks, brains, carried)}" tone="cream" size="sm">Back</SignButton></div>
 </main>
 
 <style>

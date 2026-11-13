@@ -2,12 +2,20 @@
 // GET  /api/health                  which decision models answered the startup check
 // GET  /api/matches                 recent matches
 // POST /api/matches                 start one: { fighters: [id, id], brains?: [kind, kind], seed? }
-// GET  /api/matches/:id/events      server-sent events: hello, then one tick per second
+// POST /api/matches/:id/coach       a coach's call: { side: 0 | 1, presetId }
+// GET  /api/matches/:id/events      server-sent events: hello, one tick per second, and a
+//                                   coach message whenever a call is accepted
 
 import { Config, Effect, Layer, ManagedRuntime } from "effect";
 import { DecisionModel } from "./decision-model.js";
 import { Matches } from "./matches.js";
-import type { ArenaMessage, HealthResponse, StartMatchRequest } from "./protocol.js";
+import type {
+  ArenaMessage,
+  CoachCallRequest,
+  CoachCallResponse,
+  HealthResponse,
+  StartMatchRequest,
+} from "./protocol.js";
 
 const AppLayer = Matches.layer().pipe(Layer.provideMerge(DecisionModel.layer));
 
@@ -44,6 +52,30 @@ export async function serve(port: number) {
           ),
         );
         return result;
+      }
+      const coach = /^\/api\/matches\/([\w-]+)\/coach$/.exec(path);
+      if (coach && req.method === "POST") {
+        const body = (await req.json().catch(() => null)) as CoachCallRequest | null;
+        if (!body) return Response.json({ error: "Body must be JSON" }, { status: 400 });
+        return runtime.runPromise(
+          matches.coach(coach[1], body).pipe(
+            Effect.map((call) =>
+              Response.json({ ok: true, call } satisfies CoachCallResponse, { status: 201 }),
+            ),
+            Effect.catchTag("CoachCallError", (e) =>
+              Effect.succeed(
+                Response.json(
+                  {
+                    ok: false,
+                    error: e.message,
+                    readyTick: e.readyTick,
+                  } satisfies CoachCallResponse,
+                  { status: e.status },
+                ),
+              ),
+            ),
+          ),
+        );
       }
       const events = /^\/api\/matches\/([\w-]+)\/events$/.exec(path);
       if (events && req.method === "GET") {

@@ -1,5 +1,6 @@
 // Browser side of the arena service's API (proxied at /api by Vite).
 
+import { receiveArenaMessage } from "#lib/shell/coach-calls.js";
 import type {
   ArenaMessage,
   HealthResponse,
@@ -27,13 +28,24 @@ export async function startMatch(req: StartMatchRequest): Promise<MatchSummary> 
   return body;
 }
 
-/** Watch a match. Returns the function that stops watching. */
+/**
+ * Watch a match. Returns the function that stops watching. `message` gets the fight itself
+ * (hello, then ticks); coaching goes to lib/shell/coach-calls.ts, which hears every message.
+ */
 export function watchMatch(
   id: string,
-  handlers: { message: (m: ArenaMessage) => void; missing: () => void; error: () => void },
+  handlers: {
+    message: (m: Exclude<ArenaMessage, { type: "coach" }>) => void;
+    missing: () => void;
+    error: () => void;
+  },
 ): () => void {
   const source = new EventSource(`/api/matches/${encodeURIComponent(id)}/events`);
-  source.onmessage = (e) => handlers.message(JSON.parse(e.data as string) as ArenaMessage);
+  source.onmessage = (e) => {
+    const message = JSON.parse(e.data as string) as ArenaMessage;
+    receiveArenaMessage(id, message);
+    if (message.type !== "coach") handlers.message(message);
+  };
   source.addEventListener("missing", () => {
     source.close();
     handlers.missing();

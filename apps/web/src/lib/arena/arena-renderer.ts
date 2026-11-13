@@ -165,7 +165,7 @@ export class ArenaRenderer {
   receive(message: ArenaMessage) {
     if (message.type === "hello")
       this.start(message.match, message.state, message.events, message.last);
-    else this.playback?.push(message);
+    else if (message.type === "tick") this.playback?.push(message);
   }
 
   destroy() {

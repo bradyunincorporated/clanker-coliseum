@@ -13,8 +13,20 @@ every action lasts one tick; 40-second rounds, best of 1; 2 fighters for the MVP
 type chart x1.2 / x0.8 with STAB x1.1; one-tick knockdowns; a wide walled stage; the model
 sees raw state plus full move details for both fighters, never pre-digested hints; picks
 are sampled with a seed and are mostly the model's best option; the sim runs on the server
-and browsers only watch. Fighters are original creatures. Out of the MVP: character
-creator, live coaching, pre-match filtering.
+and browsers watch and coach. Fighters are original creatures. Out of the MVP: character
+creator, pre-match filtering.
+
+Coaching (owner's direction, 2026-11-13) is presets, never the player's own text. Each side
+picks a game plan before the match (`g1`, `g2` in the setup query) and makes calls during
+it: three are on offer per side, a call shapes 5 picks and is followed by a 3-tick rest.
+`packages/game/src/ai/coaching.ts` holds every preset and its wording; the wording was
+measured against Gemini Decision 1, so re-measure before changing it. The order reaches
+every brain as one coach line after the state; a brain with no answer in time does what the
+call asks. Calls that depend on reach say whether the opponent is in reach, the one place
+the model is told something it could work out. The service accepts a call at
+`POST /api/matches/:id/coach` and tells every watcher; `apps/web/src/lib/shell/coach-calls.ts`
+is how screens hear accepted calls (`onCoachCall`) and make them. Trainer ids (`trainer1`,
+`trainer2`) are opaque strings carried from the setup query into the match summary.
 
 The look is whimsical cut-paper game art: a watercolour diner at dusk with navy ink
 outlines (owner's direction, 2026-11-13: fun, high-quality game art; the 1950s inspiration
@@ -31,14 +43,15 @@ stacked back to front (`apps/web/src/lib/components/shell/diner-diorama.svelte`)
 never covers the fighters (owner's rule, 2026-11-13): there is no foreground plate, and the
 fight canvas is always the top layer.
 
-Site pages: `/` title screen, `/fighters` select, `/coach` game plan (a stub that changes
-nothing yet), `/arena` the empty stage, `/match` the versus lobby, and `/match/<id>` the
+Site pages: `/` title screen, `/fighters` select, `/coach` game plan (each side's
+standing order), `/arena` the empty stage, `/match` the versus lobby, and `/match/<id>` the
 live match. The live match fills the whole window: the diorama is the stage and one
 transparent PixiJS canvas over it draws fighters, effects and the painted HUD (health bars,
 alarm-clock timer, banners), with the camera held still so sim positions line up with the
 painted floor. Menu buttons there are two quiet icons in a corner. Empty hooks wait for the
 fighter-art owner: a trainer slot per corner on `/fighters`, coach corners on the match
-screen, and `coachCall(side, callId)` in `apps/web/src/lib/shell/coach-calls.ts`.
+screen, and `onCoachCall()` in `apps/web/src/lib/shell/coach-calls.ts`. The coaches' call
+tickets sit under the floor line (`coach-calls.svelte`).
 
 No scrolling, anywhere (owner's rule, 2026-11-13): every page fits one landscape frame.
 `apps/web/src/lib/components/shell/game-frame.svelte` lays the site out in design units (at
