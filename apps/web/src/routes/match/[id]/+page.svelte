@@ -2,6 +2,7 @@
   import { page } from "$app/state";
   import SignButton from "#lib/components/ui/sign-button.svelte";
   import ArenaStage from "#lib/arena/arena-stage.svelte";
+  import TrainerCorners from "#lib/trainers/trainer-corners.svelte";
   import CoachCalls from "#lib/components/shell/coach-calls.svelte";
   import type { ArenaStatus } from "#lib/arena/arena-renderer.js";
 
@@ -23,12 +24,8 @@
 <main class="absolute inset-0">
   {#key data.id}
     <ArenaStage matchId={data.id} {showBoxes} onstatus={(s) => (status = s)} onproblem={(m) => (problem = m)} />
+    <TrainerCorners matchId={data.id} />
   {/key}
-
-  <!-- Coach corners: empty anchors for a per-side coaching pop-in. It hears accepted calls
-       through onCoachCall() in lib/shell/coach-calls.ts. -->
-  <div class="coach left" data-coach-side="0"></div>
-  <div class="coach right" data-coach-side="1"></div>
 
   <!-- The coaches' calls: order tickets under the floor line, clear of the fighters. -->
   {#each [0, 1] as const as side (side)}
@@ -68,19 +65,6 @@
 </main>
 
 <style>
-  /* Beside the health bars, clear of the fighters and the floor. */
-  .coach {
-    position: absolute;
-    top: 96px;
-    left: 20px;
-    width: 300px;
-    height: 220px;
-    pointer-events: none;
-  }
-  .coach.right {
-    left: auto;
-    right: 20px;
-  }
   .calls {
     position: absolute;
     bottom: 14px;

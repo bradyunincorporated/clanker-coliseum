@@ -60,6 +60,11 @@ a 1280 x 720 stage box (`stageOrigin` in `apps/web/src/lib/arena/coords.ts`; the
 is 630 down) and the plates bleed past it to cover any window shape. Never use `vw`/`vh` or
 anything that adds a scrollbar. Check screens at 1920 x 1080.
 
+The owner-supplied development fighters and trainer UI are integrated. Preserve
+`apps/web/static/fighters`, `apps/web/static/trainers`, the game fighter registry, and
+`apps/web/src/lib/trainers` when changing the visual shell. Trainer choices travel as
+`trainer1`/`trainer2`; pop-ins react to accepted calls from `onCoachCall`.
+
 ## Boundaries
 
 - `packages/game`: pure simulation and decision context. No DOM, Pixi, Effect, clock or
