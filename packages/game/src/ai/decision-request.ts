@@ -36,6 +36,8 @@ one that hasn't come out yet. Guarding: "block" stops mid and overhead moves, "c
 A blocked move that leaves the attacker far behind makes them lose their next pick. knockdown moves make the
 opponent lose their next pick. Damage is multiplied by typeMultiplier (type matchups and same-type bonus).
 Win by bringing the opponent's HP to 0, or have the higher HP fraction when the round timer runs out.
+When the opponent can reach you, give blocking or crouch-blocking a little more weight,
+especially against repeated attacks, then look for an opening to counterattack.
 Pick the action most likely to win the fight from this exact state.`;
 
 function moveText(m: MoveView): string {
