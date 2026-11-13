@@ -51,8 +51,14 @@
     color: var(--ink);
     font-family: var(--font-sans);
   }
+  /* A video game, not a document: one landscape frame, never a scrollbar. */
+  html,
   body {
-    min-height: 100dvh;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  body {
     margin: 0;
     /* Paper grain: two soft noise layers, no image file. */
     background:

@@ -42,17 +42,17 @@
   }
 </script>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
+<main class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4">
   <header class="text-center">
     <p class="callout text-sm tracking-[0.3em] text-bottle">Last step</p>
-    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)] sm:text-7xl">Ring the bell</h1>
+    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)]">Ring the bell</h1>
     <p class="callout text-lg">Forty seconds. The machines decide.</p>
   </header>
 
   <section class="grid gap-6 md:grid-cols-[1fr_auto_1fr] md:items-center">
     {#each [0, 1] as side (side)}
       {@const def = FIGHTERS[picks[side]]}
-      <article class="flex flex-col gap-4 rounded-lg border-4 border-ink bg-panel p-5 shadow-offset-lg {side === 1 ? 'md:order-3' : ''}">
+      <article class="flex flex-col gap-3 rounded-lg border-4 border-ink bg-panel p-4 shadow-offset-lg {side === 1 ? 'md:order-3' : ''}">
         <div class="flex items-start justify-between gap-3">
           <p class="callout text-sm text-paper">Player {side + 1}</p>
           <p class="callout rounded bg-paper px-2 text-xs">{def.types.join(" / ")}</p>
@@ -94,8 +94,8 @@
     {/each}
   </section>
 
-  <div class="flex flex-col items-center gap-3">
-    <Button size="lg" onclick={fight} disabled={starting || model === "offline"}>
+  <div class="flex flex-col items-center gap-2">
+    <Button onclick={fight} disabled={starting || model === "offline"}>
       {starting ? "Ringing the bell..." : "Fight!"}
     </Button>
     <p class="text-center text-sm" role="status">

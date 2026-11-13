@@ -34,6 +34,13 @@ nothing yet), `/arena` stage and HUD with no fight, `/match` the live-match lobb
 scoreboard) drawn over the diorama's `overlay` slot with the camera held still, so sim
 positions line up with the painted floor; the floor line is 87.5% down the frame.
 
+No scrolling, anywhere (owner's rule, 2026-11-13): it is a video game, so every page fits one
+landscape frame. `apps/web/src/lib/components/shell/game-frame.svelte` lays the site out in
+design units (at least 1280 x 720) and scales it to fill the window; the room under the
+header is about 1280 x 660. Build each page to fit that room. Size aspect-locked things from
+the room with `cqh`; never use `vw`/`vh` or anything that adds a scrollbar. The frame shrinks
+an over-tall page as a safety net, but a page that needs shrinking is a page to fix.
+
 ## Boundaries
 
 - `packages/game`: pure simulation and decision context. No DOM, Pixi, Effect, clock or

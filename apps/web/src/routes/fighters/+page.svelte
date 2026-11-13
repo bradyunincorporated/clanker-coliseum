@@ -12,16 +12,15 @@
 
 <svelte:head><title>Pick your clankers</title></svelte:head>
 
-<main class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
+<main class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4">
   <header class="text-center">
-    <p class="callout text-sm tracking-[0.3em] text-bottle">Step one</p>
-    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)] sm:text-7xl">Pick your clankers</h1>
+    <h1 class="font-script text-5xl leading-none text-hero drop-shadow-[3px_3px_0_var(--ink)]">Pick your clankers</h1>
   </header>
 
   <section class="grid gap-6 md:grid-cols-[1fr_auto_1fr] md:items-start">
     {#each [0, 1] as side (side)}
       {@const def = chosen[side]}
-      <article class="flex flex-col gap-4 {side === 1 ? 'md:order-3' : ''}">
+      <article class="flex flex-col gap-3 {side === 1 ? 'md:order-3' : ''}">
         <div class="rounded-lg border-4 border-ink bg-panel shadow-offset-lg">
           <p class="callout flex items-center justify-between border-b-4 border-ink bg-ink px-4 py-1.5 text-sm text-paper">
             {corners[side]}
@@ -31,19 +30,19 @@
               {/each}
             </span>
           </p>
-          <div class="relative p-4">
-            <FighterPortrait src={fighterArt(def)} color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} flip={side === 1} class="aspect-[4/3] rounded border-[3px] border-ink" />
-            <h2 class="absolute bottom-1 font-script text-6xl leading-none text-hero [text-shadow:3px_3px_0_var(--paper)] right-6">
+          <div class="relative p-3">
+            <FighterPortrait src={fighterArt(def)} color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} flip={side === 1} class="aspect-[16/6] rounded border-[3px] border-ink" />
+            <h2 class="absolute bottom-1 font-script text-5xl leading-none text-hero [text-shadow:3px_3px_0_var(--paper)] right-6">
               {def.name}
             </h2>
           </div>
         </div>
 
-        <div class="relative -mt-1 rounded-md border-[3px] border-ink bg-paper p-4 shadow-offset {side === 1 ? '-rotate-1' : 'rotate-1'}">
+        <div class="relative -mt-1 rounded-md border-[3px] border-ink bg-paper px-4 py-2.5 shadow-offset {side === 1 ? '-rotate-1' : 'rotate-1'}">
           <p class="font-medium">"{def.blurb}"</p>
-          <p class="callout mt-3 text-sm text-hero">Built in: {def.passive.name}</p>
+          <p class="callout mt-1.5 text-sm text-hero">Built in: {def.passive.name}</p>
           <p class="text-sm">{def.passive.description}</p>
-          <ul class="mt-3 grid grid-cols-2 gap-2 text-sm">
+          <ul class="mt-2 grid grid-cols-4 gap-1.5 text-xs">
             {#each Object.values(def.moves) as move (move.name)}
               <li class="rounded-sm border-2 border-ink bg-paper-deep px-2 py-1">
                 <span class="block font-bold leading-tight">{move.name}</span>
@@ -67,7 +66,7 @@
         </fieldset>
       </article>
       {#if side === 0}
-        <p class="self-center text-center font-script text-7xl text-hero drop-shadow-[3px_3px_0_var(--ink)] md:order-2 md:pt-24">vs.</p>
+        <p class="self-center text-center font-script text-7xl text-hero drop-shadow-[3px_3px_0_var(--ink)] md:order-2 md:pt-16">vs.</p>
       {/if}
     {/each}
   </section>
