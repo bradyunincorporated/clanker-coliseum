@@ -20,6 +20,16 @@ outlines, red as the hero colour, flat blue panels, hard offset shadows, script 
 The palette lives in `apps/web/src/routes/layout.css` and `apps/web/src/lib/arena/palette.ts`.
 The owner supplies sprites; until then fighters and the stage are drawn in code.
 
+There is one arena, the diner at dusk. It is built like a paper theatre (owner's direction,
+2026-11-13): flat cut-paper plates with inked edges and mottled watercolour fills, stacked
+back to front, each casting a shadow on the one behind and moving at its own parallax speed.
+Its palette adds dark blue, cyan, sea green and rustic brown to the billboard colours. The
+plates are in `apps/web/static/arena/diner` and the site's version of the stage is
+`apps/web/src/lib/components/shell/diner-diorama.svelte`.
+
+Site pages: `/` landing, `/fighters` select, `/coach` game plan (a stub that changes
+nothing yet), `/arena` stage and HUD with no fight, `/match` the live-match lobby.
+
 ## Boundaries
 
 - `packages/game`: pure simulation and decision context. No DOM, Pixi, Effect, clock or

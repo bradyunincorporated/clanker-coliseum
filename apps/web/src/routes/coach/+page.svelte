@@ -1,0 +1,77 @@
+<script lang="ts">
+  import { page } from "$app/state";
+  import { Button } from "#lib/components/ui/button/index.js";
+  import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
+  import { cssColor, picksFrom, picksQuery } from "#lib/shell/roster.js";
+
+  const picks = $derived(picksFrom(page.url.searchParams));
+
+  // Suggestion chips, not open text. Nothing here reaches the fight yet.
+  const plans = ["Rush in", "Keep your distance", "Wait and counter", "Dealer's choice"];
+  const brains = ["Gemini Decision 1", "Heuristic", "Random"];
+  let plan = $state<[string, string]>([plans[3], plans[3]]);
+  let brain = $state<[string, string]>([brains[0], brains[0]]);
+</script>
+
+<svelte:head><title>The game plan</title></svelte:head>
+
+<main class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
+  <header class="text-center">
+    <p class="callout text-sm tracking-[0.3em] text-bottle">Step two</p>
+    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)] sm:text-7xl">The game plan</h1>
+    <p class="callout mx-auto mt-4 inline-block -rotate-1 rounded-sm border-[3px] border-dashed border-hero px-4 py-1 text-sm text-hero">
+      Preview only: these choices don't change the fight yet
+    </p>
+  </header>
+
+  <section class="grid gap-6 md:grid-cols-2">
+    {#each picks as def, side (side)}
+      <article class="rounded-lg border-4 border-ink bg-paper shadow-offset-lg">
+        <div class="flex items-center gap-4 border-b-4 border-ink bg-panel p-4">
+          <FighterPortrait color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} label="" flip={side === 1} class="size-20 shrink-0 rounded-full border-[3px] border-ink" />
+          <div>
+            <p class="callout text-sm text-paper">{side === 0 ? "Left corner" : "Right corner"}</p>
+            <h2 class="font-script text-5xl leading-none text-hero [text-shadow:2px_2px_0_var(--paper)]">{def.name}</h2>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-5 p-5">
+          <fieldset>
+            <legend class="font-slab text-lg uppercase">Coach's orders</legend>
+            <div class="mt-2 flex flex-wrap gap-2">
+              {#each plans as option (option)}
+                <label class="cursor-pointer">
+                  <input type="radio" class="peer sr-only" name="plan-{side}" value={option} bind:group={plan[side]} />
+                  <span class="block rounded-full border-[3px] border-ink bg-paper-deep px-4 py-1.5 text-sm font-bold transition-colors peer-checked:bg-teal peer-checked:text-paper peer-focus-visible:outline-3 peer-focus-visible:outline-hero">{option}</span>
+                </label>
+              {/each}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="font-slab text-lg uppercase">Machine brain</legend>
+            <div class="mt-2 flex flex-wrap gap-2">
+              {#each brains as option (option)}
+                <label class="cursor-pointer">
+                  <input type="radio" class="peer sr-only" name="brain-{side}" value={option} bind:group={brain[side]} />
+                  <span class="block rounded-full border-[3px] border-ink bg-paper-deep px-4 py-1.5 text-sm font-bold transition-colors peer-checked:bg-mustard peer-focus-visible:outline-3 peer-focus-visible:outline-hero">{option}</span>
+                </label>
+              {/each}
+            </div>
+          </fieldset>
+
+          <!-- Coach callout in a hand-drawn red bubble outline. -->
+          <p class="relative self-start rounded-[2rem_2rem_2rem_0.4rem] border-[3px] border-hero px-5 py-3 font-medium">
+            <span class="callout text-hero">Coach says:</span>
+            "{plan[side]}, {def.name}!"
+          </p>
+        </div>
+      </article>
+    {/each}
+  </section>
+
+  <div class="flex flex-wrap items-center justify-center gap-4">
+    <Button href="/fighters{picksQuery(picks)}" variant="secondary">Back</Button>
+    <Button href="/arena{picksQuery(picks)}" size="lg">To the arena</Button>
+  </div>
+</main>

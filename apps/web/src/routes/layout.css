@@ -73,3 +73,14 @@
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
+
+/* Diagonal candy stripes behind gauges and along page edges (packaging-collage look). */
+@utility stripes-red {
+  background: repeating-linear-gradient(-45deg, var(--paper) 0 8px, var(--hero-red) 8px 16px);
+}
+
+/* A tagline ribbon with notched ends. */
+@utility ribbon {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.9em) 50%, 100% 100%, 0 100%, 0.9em 50%);
+  padding-inline: 2em;
+}
