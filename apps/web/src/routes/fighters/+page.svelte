@@ -2,7 +2,7 @@
   import { page } from "$app/state";
   import { Button } from "#lib/components/ui/button/index.js";
   import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
-  import { ROSTER, cssColor, picksFrom, picksQuery } from "#lib/shell/roster.js";
+  import { ROSTER, cssColor, fighterArt, picksFrom, picksQuery } from "#lib/shell/roster.js";
 
   const initial = picksFrom(page.url.searchParams);
   let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
@@ -32,7 +32,7 @@
             </span>
           </p>
           <div class="relative p-4">
-            <FighterPortrait color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} flip={side === 1} class="aspect-[4/3] rounded border-[3px] border-ink" />
+            <FighterPortrait src={fighterArt(def)} color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} flip={side === 1} class="aspect-[4/3] rounded border-[3px] border-ink" />
             <h2 class="absolute bottom-1 font-script text-6xl leading-none text-hero [text-shadow:3px_3px_0_var(--paper)] right-6">
               {def.name}
             </h2>
@@ -74,6 +74,6 @@
 
   <div class="flex flex-wrap items-center justify-center gap-4">
     <Button href="/" variant="secondary">Back</Button>
-    <Button href="/coach{picksQuery([{ id: picks[0] }, { id: picks[1] }])}" size="lg">Next: the game plan</Button>
+    <Button href="/match{picksQuery([{ id: picks[0] }, { id: picks[1] }])}" size="lg">Next: start a match</Button>
   </div>
 </main>

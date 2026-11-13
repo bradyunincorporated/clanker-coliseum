@@ -12,13 +12,14 @@ every action lasts one tick; 40-second rounds, best of 1; 2 fighters for the MVP
 type chart x1.2 / x0.8 with STAB x1.1; one-tick knockdowns; a wide walled stage; the model
 sees raw state plus full move details for both fighters, never pre-digested hints; picks
 are sampled with a seed and are mostly the model's best option; the sim runs on the server
-and browsers only watch. Fighters are original creatures. Out of the MVP: character
+and browsers only watch. Astra owns the owner-supplied development fighter art and data;
+engine work should preserve those packs and their integration. Out of the MVP: character
 creator, live coaching, pre-match filtering.
 
 The look is 1950s-60s billboard advertising with a retro diner mood: cream paper, ink
 outlines, red as the hero colour, flat blue panels, hard offset shadows, script headlines.
 The palette lives in `apps/web/src/routes/layout.css` and `apps/web/src/lib/arena/palette.ts`.
-The owner supplies sprites; until then fighters are drawn in code.
+The two development fighters now use the owner's sprite packs, with code-drawn bodies as fallback.
 
 There is one arena, the diner at dusk. It is built like a paper theatre (owner's direction,
 2026-11-13): flat cut-paper plates with inked edges and mottled watercolour fills, stacked

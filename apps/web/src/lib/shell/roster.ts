@@ -5,6 +5,10 @@ export const ROSTER: FighterDef[] = Object.values(FIGHTERS);
 
 export const cssColor = (n: number): string => `#${n.toString(16).padStart(6, "0")}`;
 
+/** Artwork lives beside each fighter's atlas, independently of its public name. */
+export const fighterArt = (def: FighterDef, file = "portrait.png"): string | undefined =>
+  def.sprites.sheet?.replace(/[^/]+$/, file);
+
 export type Picks = [FighterDef, FighterDef];
 
 /** Reads `?p1=..&p2=..`; anything missing or unknown falls back to the first two fighters. */

@@ -2,13 +2,13 @@
   import { Button } from "#lib/components/ui/button/index.js";
   import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
   import Starburst from "#lib/components/shell/starburst.svelte";
-  import { ROSTER, cssColor } from "#lib/shell/roster.js";
+  import { ROSTER, cssColor, fighterArt } from "#lib/shell/roster.js";
   import { SITE_NAME } from "#lib/site.js";
 
   const [left, right] = [ROSTER[0], ROSTER[1] ?? ROSTER[0]];
   const steps = [
     { n: "1", title: "Pick two clankers", body: "Choose who stands in each corner of the diner." },
-    { n: "2", title: "Set the game plan", body: "Give each fighter's machine brain a nudge before the bell." },
+    { n: "2", title: "Choose their brains", body: "Choose a machine brain for each fighter and ring the bell." },
     { n: "3", title: "Watch them go", body: "Forty seconds, one decision a second. You only watch." },
   ];
 </script>
@@ -38,12 +38,12 @@
         </p>
         <div class="grid grid-cols-[1fr_auto_1fr] items-end gap-2">
           <figure>
-            <FighterPortrait color={cssColor(left.sprites.color)} accent={cssColor(left.sprites.accent)} class="aspect-square rounded border-[3px] border-ink" />
+            <FighterPortrait src={fighterArt(left)} color={cssColor(left.sprites.color)} accent={cssColor(left.sprites.accent)} class="aspect-square rounded border-[3px] border-ink" />
             <figcaption class="mt-1 text-center font-script text-3xl text-paper [text-shadow:2px_2px_0_var(--ink)]">{left.name}</figcaption>
           </figure>
           <p class="pb-12 font-script text-5xl text-hero [text-shadow:2px_2px_0_var(--paper)]">vs.</p>
           <figure>
-            <FighterPortrait color={cssColor(right.sprites.color)} accent={cssColor(right.sprites.accent)} flip class="aspect-square rounded border-[3px] border-ink" />
+            <FighterPortrait src={fighterArt(right)} color={cssColor(right.sprites.color)} accent={cssColor(right.sprites.accent)} flip class="aspect-square rounded border-[3px] border-ink" />
             <figcaption class="mt-1 text-center font-script text-3xl text-paper [text-shadow:2px_2px_0_var(--ink)]">{right.name}</figcaption>
           </figure>
         </div>

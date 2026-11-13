@@ -2,7 +2,7 @@
   import { page } from "$app/state";
   import { Button } from "#lib/components/ui/button/index.js";
   import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
-  import { cssColor, picksFrom, picksQuery } from "#lib/shell/roster.js";
+  import { cssColor, fighterArt, picksFrom, picksQuery } from "#lib/shell/roster.js";
 
   const picks = $derived(picksFrom(page.url.searchParams));
 
@@ -28,7 +28,7 @@
     {#each picks as def, side (side)}
       <article class="rounded-lg border-4 border-ink bg-paper shadow-offset-lg">
         <div class="flex items-center gap-4 border-b-4 border-ink bg-panel p-4">
-          <FighterPortrait color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} label="" flip={side === 1} class="size-20 shrink-0 rounded-full border-[3px] border-ink" />
+          <FighterPortrait src={fighterArt(def)} color={cssColor(def.sprites.color)} accent={cssColor(def.sprites.accent)} label="" flip={side === 1} class="size-20 shrink-0 rounded-full border-[3px] border-ink" />
           <div>
             <p class="callout text-sm text-paper">{side === 0 ? "Left corner" : "Right corner"}</p>
             <h2 class="font-script text-5xl leading-none text-hero [text-shadow:2px_2px_0_var(--paper)]">{def.name}</h2>

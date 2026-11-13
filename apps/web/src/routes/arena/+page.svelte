@@ -3,7 +3,7 @@
   import { Button } from "#lib/components/ui/button/index.js";
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
   import Standee from "#lib/components/shell/standee.svelte";
-  import { cssColor, picksFrom, picksQuery } from "#lib/shell/roster.js";
+  import { cssColor, fighterArt, picksFrom, picksQuery } from "#lib/shell/roster.js";
 
   const picks = $derived(picksFrom(page.url.searchParams));
   const ROUND_SECONDS = 40;
@@ -37,8 +37,8 @@
     </div>
 
     <DinerDiorama>
-      <Standee name={picks[0].name} color={cssColor(picks[0].sprites.color)} x={30} />
-      <Standee name={picks[1].name} color={cssColor(picks[1].sprites.color)} x={70} flip />
+      <Standee src={fighterArt(picks[0], "frames/idle_original_000.png")} name={picks[0].name} color={cssColor(picks[0].sprites.color)} x={30} />
+      <Standee src={fighterArt(picks[1], "frames/idle_original_000.png")} name={picks[1].name} color={cssColor(picks[1].sprites.color)} x={70} flip />
     </DinerDiorama>
 
     <div class="flex flex-wrap items-center justify-between gap-2 border-t-4 border-ink bg-ink px-4 py-2 text-paper">
@@ -53,8 +53,7 @@
   </p>
 
   <div class="flex flex-wrap items-center justify-center gap-4">
-    <Button href="/coach{picksQuery(picks)}" variant="secondary">Back</Button>
+    <Button href="/match{picksQuery(picks)}" size="lg">Start a live match</Button>
     <Button href="/fighters{picksQuery(picks)}" variant="secondary">Change fighters</Button>
-    <Button href="/match{picksQuery(picks)}" size="lg">To the match</Button>
   </div>
 </main>

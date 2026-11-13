@@ -1,9 +1,9 @@
 import type { FighterDef } from "../sim/types.js";
-import boltboar from "./boltboar.js";
-import mossback from "./mossback.js";
+import arcanine from "./arcanine.js";
+import gengar from "./gengar.js";
 
 // One file per fighter. To add one: copy a file, change the id, and list it here.
-const ROSTER: FighterDef[] = [boltboar, mossback];
+const ROSTER: FighterDef[] = [arcanine, gengar];
 
 export const FIGHTERS: Record<string, FighterDef> = {};
 for (const def of ROSTER) {

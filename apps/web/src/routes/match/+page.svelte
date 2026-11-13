@@ -1,12 +1,13 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { page } from "$app/state";
   import { BRAIN_KINDS, type BrainKind } from "@clanker/arena-service/protocol";
   import { FIGHTERS } from "@clanker/game";
   import { Button } from "#lib/components/ui/button/index.js";
   import { health, startMatch } from "#lib/arena/arena-client.js";
-  import { page } from "$app/state";
-  import { picksFrom } from "#lib/shell/roster.js";
+  import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
+  import { fighterArt, picksFrom } from "#lib/shell/roster.js";
 
   const roster = Object.values(FIGHTERS);
   const BRAIN_LABEL: Record<BrainKind, string> = {
@@ -16,9 +17,8 @@
   };
   const hex = (n: number) => `#${n.toString(16).padStart(6, "0")}`;
 
-  // Arrive from the fighter pages with `?p1=..&p2=..` and those picks are already set.
-  const arrived = picksFrom(page.url.searchParams);
-  let picks = $state<[string, string]>([arrived[0].id, arrived[1].id]);
+  const initial = picksFrom(page.url.searchParams);
+  let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
   let brains = $state<[BrainKind, BrainKind]>(["gemini", "gemini"]);
   let model = $state<"checking" | "gemini" | "none" | "offline">("checking");
   let starting = $state(false);
@@ -58,11 +58,7 @@
           <p class="callout rounded bg-paper px-2 text-xs">{def.types.join(" / ")}</p>
         </div>
         <div class="flex items-center gap-4">
-          <div
-            class="size-20 shrink-0 rounded-full border-4 border-ink"
-            style="background: {hex(def.sprites.color)}"
-            aria-hidden="true"
-          ></div>
+          <FighterPortrait src={fighterArt(def)} color={hex(def.sprites.color)} accent={hex(def.sprites.accent)} flip={side === 1} class="size-24 shrink-0 rounded-full border-4 border-ink" />
           <div>
             <h2 class="font-script text-5xl leading-none text-hero [text-shadow:2px_2px_0_var(--paper)]">{def.name}</h2>
             <p class="mt-1 text-sm font-medium text-ink">{def.blurb}</p>

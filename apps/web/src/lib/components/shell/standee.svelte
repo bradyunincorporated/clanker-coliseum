@@ -1,21 +1,27 @@
 <script lang="ts">
-  // A cardboard stand-in where a fighter will stand, with the shadows a real one will get:
-  // a tight dark contact shadow at the feet and a long soft one thrown toward the camera.
-  let { name, color, x, flip = false }: { name: string; color: string; x: number; flip?: boolean } = $props();
+  // Supplied fighter art with floor shadows, or a paper stand-in while art is missing.
+  let { name, color, src, x, flip = false }: { name: string; color: string; src?: string; x: number; flip?: boolean } = $props();
 </script>
 
-<div class="standee" style:left="{x}%">
+<div class="standee" class:has-art={!!src} style:left="{x}%">
   <div class="cast"></div>
   <div class="contact"></div>
+  {#if src}
+    <img class="sprite" {src} alt="" style:transform={flip ? "scaleX(-1)" : undefined} />
+  {:else}
   <svg viewBox="0 0 120 170" class="card" style:transform={flip ? "scaleX(-1)" : undefined} aria-hidden="true">
     <path d="M14 168c-4-48 4-84 22-100-12-30 6-60 34-60s44 30 30 60c16 18 20 54 16 100z" fill="var(--paper)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round" />
     <path d="M24 162c-2-40 6-70 22-86-10-26 4-52 26-52s34 26 22 52c14 16 16 48 14 86z" fill={color} opacity="0.85" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4" />
     <circle cx="84" cy="54" r="5" fill="var(--ink)" />
   </svg>
+  {/if}
   <p class="tag">{name}</p>
 </div>
 
 <style>
+  .standee.has-art { width: 34cqw; height: 22.1cqw; }
+  .sprite { position: absolute; bottom: -10%; width: 100%; height: 100%; image-rendering: pixelated; }
+  .has-art .contact, .has-art .cast { left: 30%; right: 30%; }
   .standee {
     position: absolute;
     bottom: 12.5%;

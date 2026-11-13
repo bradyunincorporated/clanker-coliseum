@@ -10,7 +10,7 @@
     "dev": "bun scripts/dev.ts",
     "dev:web": "bun run --cwd apps/web dev",
     "arena": "bun packages/arena-service/src/main.ts",
-    "build": "bun run --cwd apps/web build",
+    "build": "bun --bun run --cwd apps/web build",
     "check": "bun run format:check && bun run lint && bun run typecheck",
     "format": "oxfmt apps/web/src apps/web/vite.config.ts packages scripts package.json",
     "format:check": "oxfmt --check apps/web/src apps/web/vite.config.ts packages scripts package.json",

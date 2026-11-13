@@ -1,8 +1,8 @@
 <script lang="ts">
-  // Stand-in portrait until the owner's sprites arrive: a paper cut-out on halftone dots.
-  let { color, accent, label = "Art on the way", flip = false, class: className = "" }: {
+  let { color, accent, src, label = "Art on the way", flip = false, class: className = "" }: {
     color: string;
     accent: string;
+    src?: string;
     label?: string;
     flip?: boolean;
     class?: string;
@@ -10,6 +10,9 @@
 </script>
 
 <div class="portrait relative overflow-hidden {className}" aria-hidden="true">
+  {#if src}
+    <img {src} alt="" class="size-full object-contain p-2" style:transform={flip ? "scaleX(-1)" : undefined} />
+  {:else}
   <svg viewBox="0 0 200 200" class="block size-full" style:transform={flip ? "scaleX(-1)" : undefined}>
     <circle cx="100" cy="104" r="84" fill="var(--paper)" opacity="0.35" />
     <g transform="translate(6 6)" fill="var(--ink)" opacity="0.85">
@@ -24,6 +27,7 @@
     <text x="104" y="96" text-anchor="middle" font-size="64" fill="var(--paper)" stroke="var(--ink)" stroke-width="3" paint-order="stroke" style="font-family: var(--font-slab)" transform={flip ? "translate(208 0) scale(-1 1)" : undefined}>?</text>
   </svg>
   <p class="callout absolute bottom-2 left-2 -rotate-3 rounded-sm border-2 border-ink bg-mustard px-2 text-[0.65rem]">{label}</p>
+  {/if}
 </div>
 
 <style>
