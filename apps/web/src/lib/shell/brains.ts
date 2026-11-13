@@ -31,15 +31,18 @@ const HOUSE: Record<Exclude<BrainKind, keyof typeof BRAIN_MODELS>, BrainCard> = 
 const TAGLINE = {
   gemini: "Powered by Gemini",
   jev: "Powered by Jev",
-  clef: "Powered by Cloudflare Clef",
+  clef: "Powered by Clef",
 } as const;
 
 /**
- * Logo files in /static/brains, each taken from the company's own site. Only add a file
- * that came from the official source; a brain without one shows its initial instead.
- * clef.svg: developers.cloudflare.com (the Cloudflare mark on the Workers AI model pages).
+ * The makers' own marks in /static/brains, each drawn in one ink colour so the three sit
+ * alike on the selector's badge. Only add a mark that came from an official source.
+ * gemini.svg, clef.svg: the Google Gemini and Cloudflare marks as published by simple-icons.
+ * jev.svg: the TypeSafe mark from typesafe.ai's own page.
  */
 const LOGO: Partial<Record<BrainKind, string>> = {
+  gemini: "/brains/gemini.svg",
+  jev: "/brains/jev.svg",
   clef: "/brains/clef.svg",
 };
 
