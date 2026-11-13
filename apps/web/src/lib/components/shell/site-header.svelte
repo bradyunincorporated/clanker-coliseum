@@ -6,6 +6,7 @@
     { href: "/fighters", label: "Fighters" },
     { href: "/coach", label: "Game plan" },
     { href: "/arena", label: "Arena" },
+    { href: "/match", label: "Match" },
   ];
 </script>
 

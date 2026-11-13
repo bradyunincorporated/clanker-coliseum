@@ -49,11 +49,12 @@
   </div>
 
   <p class="text-center text-sm font-medium">
-    Stage and scoreboard only: no fight runs on this page yet. Move your mouse across the stage to shift the camera.
+    Stage and scoreboard only: the fight itself runs on the match page. Move your mouse across the stage to shift the camera.
   </p>
 
   <div class="flex flex-wrap items-center justify-center gap-4">
     <Button href="/coach{picksQuery(picks)}" variant="secondary">Back</Button>
     <Button href="/fighters{picksQuery(picks)}" variant="secondary">Change fighters</Button>
+    <Button href="/match{picksQuery(picks)}" size="lg">To the match</Button>
   </div>
 </main>

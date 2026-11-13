@@ -17,7 +17,7 @@
 
 <main class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6">
   <div class="flex flex-wrap items-center justify-between gap-3">
-    <Button href="/" variant="secondary" size="sm">Main menu</Button>
+    <Button href="/match" variant="secondary" size="sm">Back to the lobby</Button>
     <p class="callout text-sm" role="status">
       {#if problem}
         <span class="text-hero">{problem}</span>
@@ -41,7 +41,7 @@
 
   {#if status?.over}
     <div class="flex justify-center">
-      <Button href="/" size="lg">Rematch</Button>
+      <Button href="/match" size="lg">Rematch</Button>
     </div>
   {/if}
 </main>

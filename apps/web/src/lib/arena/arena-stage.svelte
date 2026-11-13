@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
   import { ArenaRenderer, type ArenaStatus } from "./arena-renderer.js";
   import { watchMatch } from "./arena-client.js";
 
@@ -46,7 +47,10 @@
   });
 </script>
 
-<div
-  class="aspect-video w-full overflow-hidden rounded-lg border-4 border-ink shadow-offset-lg [&_canvas]:block"
-  bind:this={host}
-></div>
+<div class="overflow-hidden rounded-lg border-4 border-ink shadow-offset-lg">
+  <DinerDiorama label="The diner arena: a live match" still>
+    {#snippet overlay()}
+      <div class="absolute inset-0 [&_canvas]:block" bind:this={host}></div>
+    {/snippet}
+  </DinerDiorama>
+</div>

@@ -6,7 +6,19 @@
    * each casting a shadow on the one behind and sliding at its own speed as the camera drifts.
    * Plates live in /static/arena/diner. Depth 0 is glued to the sky; bigger numbers are closer.
    */
-  let { children }: { children?: Snippet } = $props();
+  let {
+    children,
+    overlay,
+    label = "The diner arena: an empty stage",
+    still = false,
+  }: {
+    children?: Snippet;
+    /** Drawn over every plate and never panned: the live match and its scoreboard. */
+    overlay?: Snippet;
+    label?: string;
+    /** Hold the camera still, so world positions in the overlay stay lined up with the floor. */
+    still?: boolean;
+  } = $props();
 
   // Floor strips, back to front: [height as % of the frame, tone 0..1 (far = hazier), depth].
   const FLOOR: [number, number, number][] = [
@@ -30,7 +42,11 @@
   $effect(() => {
     const el = frame;
     if (!el) return;
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (still) {
+      el.style.setProperty("--pan", "0");
+      return;
+    }
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let pointer = 0;
     let pan = 0;
     let raf = 0;
@@ -40,7 +56,7 @@
     };
     const onLeave = () => (pointer = 0);
     const tick = (now: number) => {
-      const sway = still ? 0 : Math.sin(now / 2600) * 0.45;
+      const sway = calm ? 0 : Math.sin(now / 2600) * 0.45;
       pan += (Math.max(-1, Math.min(1, sway - pointer)) - pan) * 0.06;
       el.style.setProperty("--pan", pan.toFixed(4));
       raf = requestAnimationFrame(tick);
@@ -56,7 +72,7 @@
   });
 </script>
 
-<div bind:this={frame} class="diorama" role="img" aria-label="The diner arena: an empty stage">
+<div bind:this={frame} class="diorama" role="img" aria-label={label}>
   <img class="plate sky" style:--depth="0.15" src="/arena/diner/sky.webp" alt="" />
   <img class="plate skyline" style:--depth="0.45" src="/arena/diner/skyline.webp" alt="" />
   <div class="plate neon-spill" style:--depth="0.45"></div>
@@ -86,6 +102,7 @@
   <img class="plate foreground tables" style:--depth="5" src="/arena/diner/foreground.webp" alt="" />
   <div class="grain"></div>
   <div class="vignette"></div>
+  {#if overlay}<div class="overlay">{@render overlay()}</div>{/if}
 </div>
 
 <style>
@@ -184,6 +201,10 @@
     pointer-events: none;
   }
   .playfield {
+    inset: 0;
+  }
+  .overlay {
+    position: absolute;
     inset: 0;
   }
   .foreground {

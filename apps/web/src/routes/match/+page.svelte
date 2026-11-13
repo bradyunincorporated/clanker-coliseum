@@ -5,7 +5,8 @@
   import { FIGHTERS } from "@clanker/game";
   import { Button } from "#lib/components/ui/button/index.js";
   import { health, startMatch } from "#lib/arena/arena-client.js";
-  import { SITE_NAME } from "#lib/site.js";
+  import { page } from "$app/state";
+  import { picksFrom } from "#lib/shell/roster.js";
 
   const roster = Object.values(FIGHTERS);
   const BRAIN_LABEL: Record<BrainKind, string> = {
@@ -15,7 +16,9 @@
   };
   const hex = (n: number) => `#${n.toString(16).padStart(6, "0")}`;
 
-  let picks = $state<[string, string]>([roster[0].id, (roster[1] ?? roster[0]).id]);
+  // Arrive from the fighter pages with `?p1=..&p2=..` and those picks are already set.
+  const arrived = picksFrom(page.url.searchParams);
+  let picks = $state<[string, string]>([arrived[0].id, arrived[1].id]);
   let brains = $state<[BrainKind, BrainKind]>(["gemini", "gemini"]);
   let model = $state<"checking" | "gemini" | "none" | "offline">("checking");
   let starting = $state(false);
@@ -40,12 +43,10 @@
 </script>
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:px-6">
-  <header class="flex flex-col items-center gap-1 text-center">
-    <p class="callout text-sm tracking-[0.3em] text-bottle">Tonight only · live at the diner</p>
-    <h1 class="font-script text-7xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)] sm:text-8xl">
-      {SITE_NAME}
-    </h1>
-    <p class="callout text-lg">Two clankers. Forty seconds. The machines decide.</p>
+  <header class="text-center">
+    <p class="callout text-sm tracking-[0.3em] text-bottle">Last step</p>
+    <h1 class="font-script text-6xl leading-none text-hero drop-shadow-[4px_4px_0_var(--ink)] sm:text-7xl">Ring the bell</h1>
+    <p class="callout text-lg">Forty seconds. The machines decide.</p>
   </header>
 
   <section class="grid gap-6 md:grid-cols-[1fr_auto_1fr] md:items-center">
