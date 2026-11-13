@@ -1,9 +1,13 @@
+import hitmonlee from "./hitmonlee.js";
+import scyther from "./scyther.js";
+import raichu from "./raichu.js";
+import blastoise from "./blastoise.js";
 import type { FighterDef } from "../sim/types.js";
 import arcanine from "./arcanine.js";
 import gengar from "./gengar.js";
 
 // One file per fighter. To add one: copy a file, change the id, and list it here.
-const ROSTER: FighterDef[] = [arcanine, gengar];
+const ROSTER: FighterDef[] = [arcanine, gengar, blastoise, raichu, scyther, hitmonlee];
 
 export const FIGHTERS: Record<string, FighterDef> = {};
 for (const def of ROSTER) {
