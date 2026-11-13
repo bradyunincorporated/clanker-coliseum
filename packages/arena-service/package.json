@@ -1,0 +1,16 @@
+{
+  "name": "@clanker/arena-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./protocol": "./src/protocol.ts"
+  },
+  "scripts": {
+    "start": "bun src/main.ts"
+  },
+  "dependencies": {
+    "@clanker/game": "workspace:*",
+    "effect": "4.0.3"
+  }
+}

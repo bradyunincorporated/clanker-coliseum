@@ -1,0 +1,5 @@
+{
+  "categories": { "correctness": "error" },
+  "ignorePatterns": ["**/node_modules/**", "**/.svelte-kit/**", "**/build/**"],
+  "options": { "reportUnusedDisableDirectives": "error" }
+}
