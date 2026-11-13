@@ -422,25 +422,25 @@ export class ArenaRenderer {
     this.ui.ticker.text = e.text;
     this.tickerAge = 0;
     if (e.type === "hit" || e.type === "block") {
-      const a = snap.fighters[e.side ?? 0];
       const d = snap.fighters[1 - (e.side ?? 0)];
-      const hb = a.hitbox ?? d.hurtboxes[1] ?? null;
-      const p = toScreen(hb ? hb.x + hb.w / 2 : d.x, hb ? hb.y + hb.h / 2 : 100);
+      // A small word that pops over the defender's head, so the fighters stay in view.
+      const top = d.hurtboxes.reduce((y, b) => Math.max(y, b.y + b.h), 0) || 150;
+      const p = toScreen(d.x, top + 26);
       const hit = e.type === "hit";
       const big = hit && (e.damage ?? 0) >= 10;
       const key = hit ? HIT_ART[(e.tick + e.frame) % HIT_ART.length] : "clang";
       const spark = new Sprite(this.art[key]);
       spark.anchor.set(0.5);
-      spark.position.set(p.x, p.y - 12);
+      spark.position.set(p.x, p.y);
       spark.rotation = (((e.tick * 7 + e.frame) % 9) - 4) * 0.04;
-      this.pop(spark, (hit ? (big ? 190 : 150) : 120) / this.art[key].width, hit ? 560 : 420, 0);
+      this.pop(spark, (hit ? (big ? 58 : 46) : 38) / this.art[key].width, hit ? 520 : 380, 0);
       if (hit) {
         const power = Math.min(1, 0.35 + (e.damage ?? 0) / 20);
         this.shake = Math.min(16, 4 + (e.damage ?? 0) * 0.7);
         this.onImpact?.(power);
-        if ((e.effectiveness ?? 1) > 1) this.tagline("Super effective!", p.x, p.y - 92, MUSTARD);
+        if ((e.effectiveness ?? 1) > 1) this.tagline("Super effective!", p.x, p.y - 44, MUSTARD);
         else if ((e.effectiveness ?? 1) < 1)
-          this.tagline("Not very effective...", p.x, p.y - 92, 0xc9d3ea);
+          this.tagline("Not very effective...", p.x, p.y - 44, 0xc9d3ea);
       }
     }
     if (e.type === "trade") this.tagline("Trade!", VIEW_W / 2, 232, PAPER);
