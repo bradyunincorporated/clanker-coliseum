@@ -18,6 +18,7 @@ import { DecisionModel } from "./decision-model.js";
 import { makeBrain, type FighterBrain } from "./decide.js";
 import {
   BRAIN_KINDS,
+  isModelBrain,
   type ArenaMessage,
   type MatchSummary,
   type PickInfo,
@@ -84,13 +85,21 @@ export class Matches extends Context.Service<
           budgetMs: number,
         ) => {
           const recent = m.events.filter((e) => e.tick >= m.state.tick - 3);
-          const one = (side: 0 | 1) =>
-            brains[side].decide(buildContext(m.state, side, m.defs, recent)).pipe(
+          const one = (side: 0 | 1) => {
+            const kind = brains[side].kind;
+            return brains[side].decide(buildContext(m.state, side, m.defs, recent)).pipe(
               Effect.timeoutOrElse({
                 duration: Duration.millis(Math.max(0, budgetMs - DECISION_MARGIN_MS)),
-                orElse: () => Effect.succeed<PickInfo>({ action: "idle", source: "late" }),
+                // Every brain gets the same budget; a late one is named in the pick.
+                orElse: () =>
+                  Effect.succeed<PickInfo>({
+                    action: "idle",
+                    source: "late",
+                    ...(isModelBrain(kind) ? { provider: kind } : {}),
+                  }),
               }),
             );
+          };
           return Effect.all([one(0), one(1)], { concurrency: 2 }).pipe(
             Effect.provideService(DecisionModel, model),
           );

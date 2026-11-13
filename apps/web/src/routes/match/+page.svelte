@@ -1,32 +1,31 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
-  import { BRAIN_KINDS, type BrainKind } from "@clanker/arena-service/protocol";
+  import { BRAIN_MODELS, MODEL_BRAINS, type HealthResponse } from "@clanker/arena-service/protocol";
   import { FIGHTERS } from "@clanker/game";
   import { Button } from "#lib/components/ui/button/index.js";
   import { health, startMatch } from "#lib/arena/arena-client.js";
   import { page } from "$app/state";
+  import BrainSelect from "#lib/components/shell/brain-select.svelte";
+  import { brainsFrom, type Brains } from "#lib/shell/brains.js";
   import { picksFrom } from "#lib/shell/roster.js";
 
   const roster = Object.values(FIGHTERS);
-  const BRAIN_LABEL: Record<BrainKind, string> = {
-    gemini: "Gemini Decision 1",
-    heuristic: "Heuristic",
-    random: "Random",
-  };
   const hex = (n: number) => `#${n.toString(16).padStart(6, "0")}`;
 
   // Arrive from the fighter pages with `?p1=..&p2=..` and those picks are already set.
   const arrived = picksFrom(page.url.searchParams);
   let picks = $state<[string, string]>([arrived[0].id, arrived[1].id]);
-  let brains = $state<[BrainKind, BrainKind]>(["gemini", "gemini"]);
-  let model = $state<"checking" | "gemini" | "none" | "offline">("checking");
+  let brains = $state<Brains>(brainsFrom(page.url.searchParams));
+  let service = $state<"checking" | "online" | "offline">("checking");
+  let models = $state<HealthResponse["models"] | null>(null);
   let starting = $state(false);
   let problem = $state("");
 
   onMount(async () => {
     const h = await health();
-    model = !h ? "offline" : h.decisionModel ? "gemini" : "none";
+    service = h ? "online" : "offline";
+    models = h?.models ?? null;
   });
 
   async function fight() {
@@ -77,19 +76,14 @@
             {/each}
           </ul>
         </div>
-        <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="grid grid-cols-[auto_1fr] items-end gap-3 text-sm">
           <label class="flex flex-col gap-1">
             <span class="callout text-paper">Fighter</span>
             <select bind:value={picks[side]} class="rounded border-[3px] border-ink bg-paper px-2 py-1.5 font-semibold">
               {#each roster as f (f.id)}<option value={f.id}>{f.name}</option>{/each}
             </select>
           </label>
-          <label class="flex flex-col gap-1">
-            <span class="callout text-paper">Brain</span>
-            <select bind:value={brains[side]} class="rounded border-[3px] border-ink bg-paper px-2 py-1.5 font-semibold">
-              {#each BRAIN_KINDS as b (b)}<option value={b}>{BRAIN_LABEL[b]}</option>{/each}
-            </select>
-          </label>
+          <BrainSelect bind:value={brains[side]} side={side as 0 | 1} {models} />
         </div>
       </article>
       {#if side === 0}
@@ -99,18 +93,18 @@
   </section>
 
   <div class="flex flex-col items-center gap-2">
-    <Button onclick={fight} disabled={starting || model === "offline"}>
+    <Button onclick={fight} disabled={starting || service === "offline"}>
       {starting ? "Ringing the bell..." : "Fight!"}
     </Button>
     <p class="text-center text-sm" role="status">
-      {#if model === "checking"}
+      {#if service === "checking"}
         Checking the arena service...
-      {:else if model === "offline"}
+      {:else if service === "offline"}
         The arena service isn't running. Start everything with <code class="font-bold">bun run dev</code>.
-      {:else if model === "none"}
-        Gemini Decision 1 isn't reachable from the arena service, so Gemini fighters use the heuristic brain.
-      {:else}
-        Gemini Decision 1 is connected.
+      {:else if models}
+        {#each MODEL_BRAINS as id, i (id)}
+          {i ? " · " : ""}<span title={models[id].reason ?? ""}>{BRAIN_MODELS[id].name}: <b>{models[id].ready ? "connected" : "offline"}</b></span>
+        {/each}
       {/if}
     </p>
     {#if problem}<p class="callout text-hero" role="alert">{problem}</p>{/if}

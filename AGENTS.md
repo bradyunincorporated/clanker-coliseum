@@ -6,7 +6,8 @@ Bun, Svelte (SvelteKit), Effect and PixiJS, structured like the owner's web-game
 repository, which is a read-only reference: never push to it.
 
 The game is an AI-driven 2D arcade fighter. Decisions the owner has made (2026-11-13):
-Gemini Decision 1 behind one `decide()` so the model stays swappable; 1 tick per second and
+three decision models behind one `decide()`, picked per fighter (Gemini Decision 1, TypeSafe
+Jev, Cloudflare Clef; 2026-11-13), all given the same state, actions and deadline; 1 tick per second and
 every action lasts one tick; 40-second rounds, best of 1; 2 fighters for the MVP; 12 actions
 (8 basic + 4 fixed moves), no meter, no special move, one hard-coded passive per fighter;
 type chart x1.2 / x0.8 with STAB x1.1; one-tick knockdowns; a wide walled stage; the model
@@ -45,7 +46,7 @@ an over-tall page as a safety net, but a page that needs shrinking is a page to 
 - `packages/game`: pure simulation and decision context. No DOM, Pixi, Effect, clock or
   `Math.random`. Same inputs always give the same tick.
 - `packages/arena-service`: owns matches, timing, the decision model and the key. Only
-  `decision-model.ts` knows the Gemini API. `protocol.ts` is the wire format.
+  `decision-model.ts` knows the model APIs and keys. `protocol.ts` is the wire format.
 - `apps/web`: renders what the service streams. It never simulates and never sees the key.
 - Dependencies are one-way: web -> arena-service protocol types -> game.
 - Use Effect at service and async boundaries, not per frame.

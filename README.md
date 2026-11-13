@@ -10,9 +10,14 @@ bun run check    # format, lint, typecheck (there are no tests, by rule)
 bun run build
 ```
 
-Gemini Decision 1 picks the actions. The arena service gets its key from `GEMINI_API_KEY`
-or from the environment's network proxy, and checks at startup which works. Without
-either, fighters use the heuristic brain and the HUD says so.
+Each fighter picks its own brain on the fighter page: Gemini Decision 1
+(`gemini-decision-1`), TypeSafe Jev (`jev-1.14.0`) or Cloudflare Clef
+(`@cf/cloudflare/clef`), plus the house heuristic and random brains. All three models get
+the same rules, raw state, legal actions and deadline. Keys stay in the arena service:
+`GEMINI_API_KEY`, `TYPESAFE_API_KEY`, `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+(a key can instead be injected by the environment's network proxy). The service checks
+each model at startup; a model that is down, errors or answers late is named on the HUD
+line under the fighter and in `/api/health`, and the heuristic fills in for errors.
 
 ## Layout
 

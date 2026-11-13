@@ -15,9 +15,11 @@ import {
 import type {
   ArenaMessage,
   MatchSummary,
+  ModelBrain,
   PickInfo,
   TickMessage,
 } from "@clanker/arena-service/protocol";
+import { BRAIN_MODELS } from "@clanker/arena-service/protocol";
 import { FighterView } from "./fighter-view.js";
 import { toScreen, VIEW_H, VIEW_W } from "./coords.js";
 import { HERO_RED, INK, MUSTARD, PANEL_BLUE, PAPER, PAPER_DEEP } from "./palette.js";
@@ -456,14 +458,21 @@ export class ArenaRenderer {
   }
 }
 
+/** One HUD line per fighter: which brain picked, or which model failed and what happened instead. */
 function pickLabel(p: PickInfo): string {
+  const model = (id: ModelBrain) => {
+    const m = BRAIN_MODELS[id];
+    return (id === "gemini" ? m.name : `${m.company} ${m.name}`).toUpperCase();
+  };
   switch (p.source) {
     case "gemini":
-      return `GEMINI DECISION 1${p.confidence != null ? ` · ${Math.round(p.confidence * 100)}% SURE` : ""}${p.latencyMs != null ? ` · ${p.latencyMs} MS` : ""}`;
+    case "jev":
+    case "clef":
+      return `${model(p.source)}${p.confidence != null ? ` · ${Math.round(p.confidence * 100)}% SURE` : ""}${p.latencyMs != null ? ` · ${p.latencyMs} MS` : ""}`;
     case "fallback":
-      return "GEMINI UNAVAILABLE · HEURISTIC PICKED";
+      return `${p.provider ? model(p.provider) : "MODEL"} UNAVAILABLE · HEURISTIC PICKED`;
     case "late":
-      return "DECISION LATE · IDLED";
+      return `${p.provider ? `${model(p.provider)} ` : ""}DECISION LATE · IDLED`;
     case "forced":
       return "NO PICK THIS TICK";
     default:

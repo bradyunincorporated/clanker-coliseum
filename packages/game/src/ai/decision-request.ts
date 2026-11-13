@@ -1,12 +1,23 @@
-// Builds the Gemini Decision 1 request for one fighter's pick. Pure: the server sends it.
-// API: POST https://generativelanguage.googleapis.com/v1beta/decisions, header x-goog-api-key,
-// body { model, input, questions }; a choice answer has { choice, probabilities, confidence }.
+// Builds the decision-model request for one fighter's pick. Pure: the server sends it.
+// Every model gets the same rules, the same raw state and the same legal actions; only the
+// envelope differs.
+// Gemini Decision 1: POST https://generativelanguage.googleapis.com/v1beta/decisions, header
+//   x-goog-api-key, body { model, input, questions }.
+// System One (TypeSafe Jev, Cloudflare Clef): body { model, state, questions }.
+// A choice answer has { choice, probabilities, confidence } in all three.
 
 import type { DecisionContext, MoveView } from "./provider.js";
 import { BASIC_ACTION_TEXT } from "./actions.js";
 
 export const GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/decisions";
 export const GEMINI_MODEL = "gemini-decision-1";
+export const JEV_ENDPOINT = "https://api.typesafe.ai/v1/systemone";
+export const JEV_MODEL = "jev-1.14.0";
+/** Workers AI model id (in the URL) and the model selector (in the body). */
+export const CLEF_MODEL_ID = "@cf/cloudflare/clef";
+export const CLEF_MODEL = "clef";
+export const clefEndpoint = (accountId: string): string =>
+  `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(accountId)}/ai/run/${CLEF_MODEL_ID}`;
 
 /** What the server returns for POST /api/decide. */
 export interface DecisionAnswer {
@@ -32,7 +43,8 @@ function moveText(m: MoveView): string {
   return `${m.name} (${m.type}, ${m.level}): ${m.damage} dmg x${m.typeMultiplier}, startup ${m.startup}f, active ${m.active}f, recovery ${m.recovery}f, reach ${reach}px, hitbox height ${m.hitbox.y}-${m.hitbox.y + m.hitbox.h}px${m.knockdown ? ", knockdown" : ""}${m.invincible ? `, invincible frames ${m.invincible[0]}-${m.invincible[1]}` : ""}${m.lunge ? `, lunges ${m.lunge}px/frame` : ""}`;
 }
 
-export function buildDecisionRequest(ctx: DecisionContext) {
+/** The parts every model sees: rules plus raw state as text, and one choice question. */
+function decisionParts(ctx: DecisionContext) {
   const criteria: Record<string, string> = {};
   for (const a of ctx.legalActions) {
     const move = ctx.self.moves.find((m) => m.slot === a);
@@ -48,8 +60,7 @@ export function buildDecisionRequest(ctx: DecisionContext) {
     coaching: ctx.coaching ?? null,
   };
   return {
-    model: GEMINI_MODEL,
-    input: `${RULES}\n\nGame state (JSON):\n${JSON.stringify(state)}`,
+    text: `${RULES}\n\nGame state (JSON):\n${JSON.stringify(state)}`,
     questions: {
       action: {
         type: "choice",
@@ -58,4 +69,16 @@ export function buildDecisionRequest(ctx: DecisionContext) {
       },
     },
   };
+}
+
+/** Gemini Decision 1 request. */
+export function buildDecisionRequest(ctx: DecisionContext) {
+  const { text, questions } = decisionParts(ctx);
+  return { model: GEMINI_MODEL, input: text, questions };
+}
+
+/** System One request (Jev, Clef): the same text and question, under `state`. */
+export function buildSystemOneRequest(ctx: DecisionContext, model: string) {
+  const { text, questions } = decisionParts(ctx);
+  return { model, state: text, questions };
 }

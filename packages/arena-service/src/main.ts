@@ -1,5 +1,5 @@
 // Arena service: runs matches on the server and streams them to browsers.
-// GET  /api/health                  which decision model is configured
+// GET  /api/health                  which decision models answered the startup check
 // GET  /api/matches                 recent matches
 // POST /api/matches                 start one: { fighters: [id, id], brains?: [kind, kind], seed? }
 // GET  /api/matches/:id/events      server-sent events: hello, then one tick per second
@@ -29,7 +29,7 @@ export async function serve(port: number) {
       const url = new URL(req.url);
       const path = url.pathname;
       if (req.method === "GET" && path === "/api/health") {
-        return Response.json({ ok: true, decisionModel: model.name } satisfies HealthResponse);
+        return Response.json({ ok: true, models: model.status } satisfies HealthResponse);
       }
       if (path === "/api/matches" && req.method === "GET") return Response.json(matches.list());
       if (path === "/api/matches" && req.method === "POST") {
@@ -81,7 +81,12 @@ export async function serve(port: number) {
   });
   await runtime.runPromise(
     Effect.log(
-      `Arena service on http://${server.hostname}:${server.port} (decision model: ${model.name ?? "none, heuristic only"})`,
+      `Arena service on http://${server.hostname}:${server.port} (models ready: ${
+        Object.entries(model.status)
+          .filter(([, s]) => s.ready)
+          .map(([id]) => id)
+          .join(", ") || "none, heuristic only"
+      })`,
     ),
   );
   return { server, runtime };

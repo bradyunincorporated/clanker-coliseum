@@ -3,9 +3,11 @@
   import { Button } from "#lib/components/ui/button/index.js";
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
   import Standee from "#lib/components/shell/standee.svelte";
-  import { cssColor, picksFrom, picksQuery } from "#lib/shell/roster.js";
+  import { brainsFrom, setupQuery } from "#lib/shell/brains.js";
+  import { cssColor, picksFrom } from "#lib/shell/roster.js";
 
   const picks = $derived(picksFrom(page.url.searchParams));
+  const brains = $derived(brainsFrom(page.url.searchParams));
   const ROUND_SECONDS = 40;
 </script>
 
@@ -43,9 +45,9 @@
     </DinerDiorama>
 
     <div class="flex items-center justify-between gap-3 border-t-4 border-ink bg-ink px-4 py-2 text-paper">
-      <Button href="/coach{picksQuery(picks)}" variant="secondary" size="sm">Back</Button>
+      <Button href="/coach{setupQuery(picks, brains)}" variant="secondary" size="sm">Back</Button>
       <p class="callout text-sm">Stage and scoreboard only · the fight runs on the match page</p>
-      <Button href="/match{picksQuery(picks)}" size="sm">To the match</Button>
+      <Button href="/match{setupQuery(picks, brains)}" size="sm">To the match</Button>
     </div>
   </div>
 

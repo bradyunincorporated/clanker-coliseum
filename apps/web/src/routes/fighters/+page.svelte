@@ -2,10 +2,14 @@
   import { page } from "$app/state";
   import { Button } from "#lib/components/ui/button/index.js";
   import FighterPortrait from "#lib/components/shell/fighter-portrait.svelte";
-  import { ROSTER, cssColor, picksFrom, picksQuery } from "#lib/shell/roster.js";
+  import BrainSelect from "#lib/components/shell/brain-select.svelte";
+  import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
+  import { ROSTER, cssColor, picksFrom } from "#lib/shell/roster.js";
 
   const initial = picksFrom(page.url.searchParams);
   let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
+  // Each corner picks its own brain; the choice rides along in the query (`b1`, `b2`).
+  let brains = $state<Brains>(brainsFrom(page.url.searchParams));
   const chosen = $derived(picks.map((id) => ROSTER.find((f) => f.id === id) ?? ROSTER[0]));
   const corners = ["Left corner", "Right corner"];
 </script>
@@ -52,6 +56,7 @@
           </ul>
         </div>
 
+        <div class="flex flex-wrap items-end justify-between gap-3">
         <fieldset class="flex flex-wrap gap-2">
           <legend class="callout mb-1 text-sm">Who's in the {corners[side].toLowerCase()}?</legend>
           {#each ROSTER as f (f.id)}
@@ -64,6 +69,8 @@
             </label>
           {/each}
         </fieldset>
+        <BrainSelect bind:value={brains[side]} side={side as 0 | 1} class="w-80" />
+        </div>
       </article>
       {#if side === 0}
         <p class="self-center text-center font-script text-7xl text-hero drop-shadow-[3px_3px_0_var(--ink)] md:order-2 md:pt-16">vs.</p>
@@ -73,6 +80,6 @@
 
   <div class="flex flex-wrap items-center justify-center gap-4">
     <Button href="/" variant="secondary">Back</Button>
-    <Button href="/coach{picksQuery([{ id: picks[0] }, { id: picks[1] }])}">Next: the game plan</Button>
+    <Button href="/coach{setupQuery([{ id: picks[0] }, { id: picks[1] }], brains)}">Next: the game plan</Button>
   </div>
 </main>

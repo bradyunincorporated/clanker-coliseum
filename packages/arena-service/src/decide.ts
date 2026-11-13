@@ -9,7 +9,7 @@ import {
 } from "@clanker/game";
 import { Effect } from "effect";
 import { DecisionModel } from "./decision-model.js";
-import type { BrainKind, PickInfo } from "./protocol.js";
+import { isModelBrain, type BrainKind, type PickInfo } from "./protocol.js";
 
 /** A fighter's brain for one match: seeded so a match replays the same way from the same answers. */
 export interface FighterBrain {
@@ -23,6 +23,7 @@ export function makeBrain(kind: BrainKind, seed: number): FighterBrain {
   const random = new RandomBrain();
   random.reset(seed);
   const rand = mulberry32(seed * 17 + 11);
+  let lastFailure = "";
   const local = (brain: HeuristicBrain | RandomBrain, ctx: DecisionContext) =>
     Effect.promise(() => brain.decide(ctx));
 
@@ -37,19 +38,26 @@ export function makeBrain(kind: BrainKind, seed: number): FighterBrain {
         if (kind === "heuristic") {
           return { action: yield* local(heuristic, ctx), source: "heuristic" } satisfies PickInfo;
         }
+        if (!isModelBrain(kind)) return { action: "idle", source: "forced" } satisfies PickInfo;
         const model = yield* DecisionModel;
-        return yield* model.decide(ctx).pipe(
+        return yield* model.decide(kind, ctx).pipe(
           Effect.map((answer): PickInfo => ({
             // Mostly the model's top option, sometimes its runner-up (seeded).
             action: samplePick(answer.probabilities, ctx.legalActions, rand),
-            source: "gemini",
+            source: kind,
             confidence: answer.confidence,
             latencyMs: answer.latencyMs,
           })),
           Effect.catchTag("DecisionError", (e) =>
-            local(heuristic, ctx).pipe(
-              Effect.map((action): PickInfo => ({ action, source: "fallback", note: e.message })),
-            ),
+            Effect.gen(function* () {
+              // Say why once per distinct failure, not once a second.
+              if (e.message !== lastFailure) {
+                lastFailure = e.message;
+                yield* Effect.logWarning(`${kind} brain fell back to the heuristic: ${e.message}`);
+              }
+              const action = yield* local(heuristic, ctx);
+              return { action, source: "fallback", provider: kind, note: e.message } as PickInfo;
+            }),
           ),
         );
       }),
