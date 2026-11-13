@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
+  import TrainerSelect from "#lib/trainers/trainer-select.svelte";
+  import { trainerFrom, type TrainerPicks } from "#lib/trainers/roster.js";
   import BrainSelect from "#lib/components/shell/brain-select.svelte";
   import CornerStand from "#lib/components/shell/corner-stand.svelte";
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
@@ -12,8 +14,18 @@
   let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
   // Each corner picks its own brain; the choice rides along in the query (`b1`, `b2`).
   let brains = $state<Brains>(brainsFrom(page.url.searchParams));
+  let trainers = $state<TrainerPicks>([
+    trainerFrom(page.url.searchParams.get("trainer1"), 0).id,
+    trainerFrom(page.url.searchParams.get("trainer2"), 1).id,
+  ]);
+  const trainerParams = $derived.by(() => {
+    const params = new URLSearchParams(page.url.search);
+    params.set("trainer1", trainers[0]);
+    params.set("trainer2", trainers[1]);
+    return params;
+  });
   const chosen = $derived(picks.map((id) => ROSTER.find((f) => f.id === id) ?? ROSTER[0]));
-  const next = $derived(`/match${setupQuery([{ id: picks[0] }, { id: picks[1] }], brains, page.url.searchParams)}`);
+  const next = $derived(`/match${setupQuery([{ id: picks[0] }, { id: picks[1] }], brains, trainerParams)}`);
 
   function cycle(side: 0 | 1, by: number) {
     const at = ROSTER.findIndex((f) => f.id === picks[side]);
@@ -22,6 +34,7 @@
 
   // A and D turn the left corner, the arrow keys the right one, Enter moves on.
   function onKey(e: KeyboardEvent) {
+    if ((e.target as HTMLElement).closest("input, select, textarea, [contenteditable]")) return;
     if ((e.target as HTMLElement).closest("button, a")) {
       if (e.code === "Enter" || e.code === "Space") return;
     }
@@ -67,7 +80,9 @@
       </article>
 
       <!-- Trainer pick goes here: an empty slot per corner, under that corner's menu card. -->
-      <div class="trainer" class:right={side === 1} data-trainer-side={side}></div>
+      <div class="trainer" class:right={side === 1} data-trainer-side={side}>
+        <TrainerSelect bind:value={trainers[side]} {side} />
+      </div>
     {/each}
 
     <img class="vs" src="/ui/vs.webp" alt="versus" />

@@ -8,7 +8,7 @@
 </script>
 
 <fieldset class="trainer-select">
-  <legend>Your coach</legend>
+  <legend class="lettering">Your coach</legend>
   <div class="choices">
     {#each TRAINERS as trainer (trainer.id)}
       <label class:selected={value === trainer.id}>
@@ -23,14 +23,14 @@
 
 <style>
   .trainer-select { min-width: 0; border: 0; padding: 0; margin: 0; }
-  legend { margin-bottom: 3px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; }
-  .choices { display: flex; gap: 6px; }
-  label { position: relative; display: grid; justify-items: center; min-width: 60px; padding: 2px 6px 4px; border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: background 120ms, border-color 120ms; }
-  label:hover { background: #ffffff20; }
-  label.selected { border-color: var(--mustard, #f2c85c); background: #f2c85c20; }
-  label:focus-within { outline: 2px solid currentColor; outline-offset: 3px; }
+  legend { margin-bottom: 5px; font-size: 19px; }
+  .choices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; }
+  label { position: relative; display: grid; justify-items: center; padding: 0 0 5px; border: 2px solid transparent; border-radius: 10px; cursor: pointer; transition: translate 150ms, background 150ms; }
+  label:hover { translate: 0 -3px; background: #f6ecd414; }
+  label.selected { border-color: var(--mustard); background: #edb93c20; }
+  label:focus-within { outline: 2px solid var(--paper); outline-offset: 3px; }
   input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  img { width: 56px; height: 56px; object-fit: contain; image-rendering: pixelated; }
-  span { font-size: 11px; font-weight: 800; line-height: 1; }
+  img { width: 80px; max-width: none; height: 80px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 3px 2px #0c112680); }
+  span { font-family: var(--font-display); font-size: 13px; line-height: 1; color: var(--paper); text-shadow: 0 2px var(--ink); }
   @media (prefers-reduced-motion: reduce) { label { transition: none; } }
 </style>
