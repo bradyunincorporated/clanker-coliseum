@@ -70,11 +70,11 @@ export function brainsFrom(params: Pick<URLSearchParams, "get">): Brains {
 }
 
 /** Setup that other screens own and every screen passes along untouched. */
-const CARRIED = ["trainer1", "trainer2"] as const;
+const CARRIED = ["g1", "g2", "trainer1", "trainer2"] as const;
 
 /**
  * The whole pre-match setup as a query string: both fighters and both brains, plus the
- * trainer picks (`trainer1`, `trainer2`) carried over from `from` when it has them.
+ * game plans (`g1`, `g2`) and trainer picks (`trainer1`, `trainer2`) carried over from `from`.
  */
 export const setupQuery = (
   picks: readonly [{ id: string }, { id: string }],
