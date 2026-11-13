@@ -1,6 +1,6 @@
 # Clanker Coliseum: how to make a fighter
 
-Version 4, 2026-11-13. A generic template for making any fighter: what a fighter is made of, what each field does in a fight, which frames to draw, and the file format the engine loads. It matches the current engine build (`packages/game/src/sim/types.ts`, `apps/web/src/lib/arena/fighter-view.ts`). Version 4 changes: move art follows the move's real frame data (section 5), the floor line sits at y = 468 in the cell instead of the bottom edge (section 4), body layouts for four-legged and round creatures (section 2), effect art per move (section 5), and corrected wording on what recovery does (section 2).
+Version 4.1, 2026-11-13. A generic template for making any fighter: what a fighter is made of, what each field does in a fight, which frames to draw, and the file format the engine loads. It matches the current engine build (`packages/game/src/sim/types.ts`, `apps/web/src/lib/arena/fighter-view.ts`). Version 4 changes: move art follows the move's real frame data (section 5), the floor line sits at y = 468 in the cell instead of the bottom edge (section 4), body layouts for four-legged and round creatures (section 2), effect art per move (section 5), and corrected wording on what recovery does (section 2). 4.1 adds looping poses on elapsed time (section 5).
 
 ## 1. How a fight works (why the fields matter)
 
@@ -162,6 +162,15 @@ The engine shows frame `floor(actionFrame / 60 x N)` of an animation, where N is
 | `ko` | 1 | knockdown_ground |
 | `victory` | 1 | victory |
 
+### Looping poses (idle and other held poses)
+
+A pose can instead loop on real elapsed time, at its own length, across ticks. In the fighter file: `loops: { idle: 3600 }` (milliseconds). The idle animation then plays its frames evenly over 3.6 seconds and repeats for as long as the fighter stays idle, instead of restarting every second. It starts from its first frame whenever the fighter enters the pose, so make frame 1 the neutral stance.
+
+- Provide the **whole loop** as the animation's frames (any count, evenly spaced in time), plus its length in ms. No one-second excerpt is needed.
+- Use it for poses that are held: `idle`, `block`, `crouchBlock`, `crouch`, `victory`, `ko`. Leave walks, jumps, knockdown and moves on tick timing, because they must line up with the motion and the hitboxes.
+- Every frame in the loop must keep the body inside the same hurtboxes; a loop is looks only.
+- Cost: each loop frame is a cell in the sheet. 8 to 12 frames per loop is plenty; use a second sheet image if they don't fit in 4096 x 4096.
+
 ### Moves: timed by the move's own frame data
 
 Moves don't use the 12-slot timeline. Each move has three animations in the sheet, and the engine picks between them from the simulation itself:
@@ -230,6 +239,7 @@ sprites: {
     move3: { windup: "move3_windup", strike: "move3_strike", recover: "move3_recover" },
     move4: { windup: "move4_windup", strike: "move4_strike", recover: "move4_recover" },
   },
+  loops: { idle: 3600 },                                      // optional: ms per loop
   effects: { move2: { animation: "move2_fx", linger: 8 } },   // optional
   anchor: { x: 0.5, y: 0.9 },   // the ground point (400, 468)
   scale: 0.5,

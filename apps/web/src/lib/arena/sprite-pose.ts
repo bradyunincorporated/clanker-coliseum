@@ -19,6 +19,8 @@ export interface PoseChoice {
   progress: number;
   /** Which pose it stands for, for per-pose offsets. */
   key: PoseKey;
+  /** Set when the animation loops on elapsed time; `progress` is then ignored. */
+  loopMs?: number;
 }
 
 export function isMove(def: FighterDef, action: string): action is MoveSlot {
@@ -27,12 +29,12 @@ export function isMove(def: FighterDef, action: string): action is MoveSlot {
 
 /** Null when the fighter has no art for what it is doing: the placeholder is drawn instead. */
 export function choosePose(def: FighterDef, f: FighterFrame): PoseChoice | null {
-  const { animations = {}, moves = {} } = def.sprites;
+  const { animations = {}, moves = {}, loops = {} } = def.sprites;
   const spread = (key: PoseKey): PoseChoice | null => {
     const animation = animations[key];
-    return animation
-      ? { animation, key, progress: Math.min(f.actionFrame, 59) / FRAMES_PER_TICK }
-      : null;
+    if (!animation) return null;
+    const progress = Math.min(f.actionFrame, 59) / FRAMES_PER_TICK;
+    return { animation, key, progress, loopMs: loops[key] };
   };
   if (f.status !== "normal") return spread(f.status);
   if (!isMove(def, f.action)) return spread(f.action);
@@ -59,7 +61,9 @@ export function choosePose(def: FighterDef, f: FighterFrame): PoseChoice | null 
       };
     default:
       // The move is over; the rest of the tick is idle time.
-      return animations.idle ? { animation: animations.idle, key: "idle", progress: 0 } : null;
+      return animations.idle
+        ? { animation: animations.idle, key: "idle", progress: 0, loopMs: loops.idle }
+        : null;
   }
 }
 

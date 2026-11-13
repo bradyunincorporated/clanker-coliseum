@@ -189,6 +189,13 @@ export interface SpriteSpec {
   sheet?: string;
   /** Animation name inside the sheet for each action. Spread evenly over the 60-frame tick. */
   animations?: Partial<Record<PoseKey, string>>;
+  /**
+   * Poses whose animation loops on real elapsed time instead of being spread over one tick:
+   * the loop's length in milliseconds. A 3.6 second idle keeps playing across ticks for as
+   * long as the fighter stays idle, and starts from its first frame when the pose begins.
+   * Looks only: the sim never sees it. Good for idle, block, crouch, victory and ko.
+   */
+  loops?: Partial<Record<PoseKey, number>>;
   /** Phase-aware art per move. A move listed here ignores its entry in `animations`. */
   moves?: Partial<Record<MoveSlot, MovePoses>>;
   /** Effect art drawn with a move's hitbox. */

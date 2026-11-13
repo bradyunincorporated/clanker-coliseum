@@ -253,7 +253,7 @@ export class ArenaRenderer {
     const fi = playback.frameIndex;
     const snap = tick?.result.frames[fi] ?? openingSnapshot(this.opening, defs);
 
-    for (const i of [0, 1] as const) this.fighters[i].update(snap.fighters[i]);
+    for (const i of [0, 1] as const) this.fighters[i].update(snap.fighters[i], dtMs);
     if (tick) {
       for (const e of tick.result.events) {
         if (e.frame <= fi && !this.fired.has(e)) {

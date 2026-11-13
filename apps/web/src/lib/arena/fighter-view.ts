@@ -15,6 +15,9 @@ export class FighterView extends Container {
   private sprite: AnimatedSprite | null = null;
   private sheet: Spritesheet | null = null;
   private effect: AnimatedSprite | null = null;
+  private dtMs = 0;
+  private looping = "";
+  private loopElapsed = 0;
   private lastStatus: FighterFrame["status"] = "normal";
   private flash = 0;
   private disposed = false;
@@ -39,7 +42,8 @@ export class FighterView extends Container {
     }
   }
 
-  update(f: FighterFrame) {
+  update(f: FighterFrame, dtMs = 0) {
+    this.dtMs = dtMs;
     if (f.status === "hitstun" && this.lastStatus !== "hitstun") this.flash = 6;
     this.lastStatus = f.status;
     if (this.flash > 0) this.flash--;
@@ -76,7 +80,12 @@ export class FighterView extends Container {
     }
     sp.visible = true;
     if (sp.textures !== textures) sp.textures = textures;
-    sp.gotoAndStop(frameAt(pose.progress, textures.length));
+    // A looping pose runs on real time and carries on across ticks until the pose changes.
+    if (pose.loopMs && this.looping === pose.animation) this.loopElapsed += this.dtMs;
+    else this.loopElapsed = 0;
+    this.looping = pose.loopMs ? pose.animation : "";
+    const progress = pose.loopMs ? (this.loopElapsed % pose.loopMs) / pose.loopMs : pose.progress;
+    sp.gotoAndStop(frameAt(progress, textures.length));
     // The sprite's anchor is the fighter's ground point; per-pose offsets nudge the exceptions.
     const nudge = this.def.sprites.offsets?.[pose.key];
     const p = toScreen(f.x + f.facing * (nudge?.x ?? 0), f.y + (nudge?.y ?? 0));
