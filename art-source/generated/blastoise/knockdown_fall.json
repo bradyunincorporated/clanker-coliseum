@@ -1,0 +1,33 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "prompt": "Create ONE animation cel for a 2D fighter. Use the supplied Pokemon Generation 5 Black and White animated sprite as strict identity, proportions, palette and pixel-art reference. Blastoise, stocky blue turtle Pokemon, cream segmented belly, brown shell with cream rim, two metallic water cannons above shoulders, short ears, exactly two arms and two legs.\nDraw this precise pose: Tumbling backward toward the LEFT after being hit from the RIGHT, entire body tilted diagonally with feet up. Readable hurt pose.\nThe character faces RIGHT in three-quarter side view throughout. Preserve the same body volume, head size, pixel scale, markings and lighting as the reference. Changes in silhouette must come from articulation. Render true coarse Nintendo DS sprite pixel art, chunky square pixels, dark pixel outline, restrained flat-color clusters, hard stair-step edges. Full body and all extremities visible. Center the complete character with ample margin. One character only. Perfect uniform chroma MAGENTA background RGB(255,0,255). No text, grid, labels, multiple panels, shadows, scenery, motion trails or attack effects. No soft painting or antialiasing. The output is an enlarged pixel sprite, retaining roughly 60-80 logical pixels of character detail. The first image is the canonical idle reference and the second, if supplied, is the original palette reference. CRITICAL: The complete silhouette must fit within the central 75 percent of the canvas. Leave at least 12 percent empty magenta margin on ALL four edges, including above raised wings and ears. Never crop any body part.",
+  "references": [
+    "art-source/references/blastoise/guide.png"
+  ],
+  "usage": {
+    "total_tokens": 4546,
+    "total_input_tokens": 1449,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 329
+      },
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 1944,
+    "output_tokens_by_modality": [
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 1153,
+    "initial_input_tokens": 1449
+  },
+  "interaction_id": "v1_Chc2SXYzYXA3aEtmcWtvZEFQNDl5cHNRRRIXNkl2M2FwN2hLZnFrb2RBUDQ5eXBzUUU"
+}

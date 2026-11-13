@@ -1,0 +1,33 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "prompt": "Create a polished character-selection portrait of Blastoise, stocky blue turtle Pokemon, cream segmented belly, brown shell with cream rim, two metallic water cannons above shoulders, short ears, exactly two arms and two legs. Strictly match the attached Generation 5 reference for identity, coloring and anatomy. Head and upper torso, expressive three-quarter view facing RIGHT. Beautiful crisp Pokemon pixel art with purposeful color clusters and strong dark outline. Coarse roughly 128x128 logical pixels enlarged. Keep ears, head and visible wings entirely in frame with comfortable margins. Plain warm cream RGB(243,233,210) background. No text, frames, props or other characters.",
+  "references": [
+    "art-source/references/blastoise/guide.png"
+  ],
+  "usage": {
+    "total_tokens": 3582,
+    "total_input_tokens": 1266,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 146
+      },
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 1470,
+    "output_tokens_by_modality": [
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 846,
+    "initial_input_tokens": 1266
+  },
+  "interaction_id": "v1_Chd6SXYzYXBIQkpaUFNvZEFQMGU2V3VRRRIXekl2M2FwSEJKWlBTb2RBUDBlNld1UUU"
+}

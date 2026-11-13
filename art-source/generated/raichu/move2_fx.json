@@ -1,0 +1,33 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "prompt": "Create a 2 by 2 sprite sheet containing FOUR sequential cels of jagged branching bright yellow-white lightning striking RIGHT, amber zigzag outer arcs. Effect only, no creature. Top-left forming, top-right full force, bottom-left full force variant, bottom-right dispersing. Each quadrant contains exactly one entire effect with generous empty margins, occupying at most 70 percent of its quadrant. Consistent middle cel dimensions. Face RIGHT. Match the reference's Generation 5 chunky Nintendo DS pixel art, crisp hard square pixels, limited colors, no gradients, no blur. Uniform pure MAGENTA RGB(255,0,255) background. No text, dividers, grid or labels. Square canvas.",
+  "references": [
+    "art-source/references/raichu/guide.png"
+  ],
+  "usage": {
+    "total_tokens": 3181,
+    "total_input_tokens": 1269,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 149
+      },
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 1602,
+    "output_tokens_by_modality": [
+      {
+        "modality": "image",
+        "tokens": 1120
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 310,
+    "initial_input_tokens": 1269
+  },
+  "interaction_id": "v1_ChcyNHYzYW82M091Qy1vZEFQbE5DaTBBZxIXMjR2M2FvNjNPdUMtb2RBUGxOQ2kwQWc"
+}
