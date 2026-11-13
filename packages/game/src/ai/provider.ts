@@ -25,7 +25,7 @@ export interface DecisionContext {
   legalActions: ActionId[];
   /** Recent events, newest last (last ~3 ticks). Includes the result of the tick that is still animating. */
   recentEvents: FightEvent[];
-  /** Pre-fight coaching text for this fighter (out of MVP scope; plumbed through for later). */
+  /** The coach line for this decision: the active call's sentence, or the game plan's (see coaching.ts). */
   coaching?: string;
 }
 

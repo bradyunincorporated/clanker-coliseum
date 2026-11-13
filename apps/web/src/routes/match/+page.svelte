@@ -9,6 +9,7 @@
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
   import SignButton from "#lib/components/ui/sign-button.svelte";
   import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
+  import { plansFrom, trainersFrom } from "#lib/shell/coach-setup.js";
   import { picksFrom } from "#lib/shell/roster.js";
 
   // Arrive from fighter select with `?p1=..&p2=..&b1=..&b2=..` and the setup is already made.
@@ -30,7 +31,13 @@
     starting = true;
     problem = "";
     try {
-      const match = await startMatch({ fighters: [picks[0].id, picks[1].id], brains });
+      const match = await startMatch({
+        fighters: [picks[0].id, picks[1].id],
+        brains,
+        // Game plans and trainers ride in the query from the screens that own them.
+        plans: plansFrom(page.url.searchParams),
+        trainers: trainersFrom(page.url.searchParams),
+      });
       await goto(`/match/${match.id}${setupQuery(picks, brains, page.url.searchParams)}`);
     } catch (err) {
       problem = err instanceof Error ? err.message : String(err);

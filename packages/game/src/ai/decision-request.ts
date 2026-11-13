@@ -57,10 +57,14 @@ function decisionParts(ctx: DecisionContext) {
     you: ctx.self,
     opponent: ctx.opponent,
     recentEvents: ctx.recentEvents.map((e) => `tick ${e.tick} frame ${e.frame}: ${e.text}`),
-    coaching: ctx.coaching ?? null,
   };
+  // The coach's order is its own line after the state. Probes showed the same sentence
+  // lands about twice as hard there as it does as a field inside the state JSON.
+  const coach = ctx.coaching
+    ? `\n\nCOACH INSTRUCTION (from your corner, follow it): ${ctx.coaching}`
+    : "";
   return {
-    text: `${RULES}\n\nGame state (JSON):\n${JSON.stringify(state)}`,
+    text: `${RULES}\n\nGame state (JSON):\n${JSON.stringify(state)}${coach}`,
     questions: {
       action: {
         type: "choice",

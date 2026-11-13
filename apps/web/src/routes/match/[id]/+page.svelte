@@ -2,6 +2,7 @@
   import { page } from "$app/state";
   import SignButton from "#lib/components/ui/sign-button.svelte";
   import ArenaStage from "#lib/arena/arena-stage.svelte";
+  import CoachCalls from "#lib/components/shell/coach-calls.svelte";
   import type { ArenaStatus } from "#lib/arena/arena-renderer.js";
 
   let { data } = $props();
@@ -9,6 +10,8 @@
   let status = $state<ArenaStatus | null>(null);
   let problem = $state("");
   const over = $derived(status?.over ?? false);
+  // Both coaches share this screen by default; `?seat=0` or `?seat=1` shows one side's calls.
+  const seat = $derived(page.url.searchParams.get("seat"));
 
   function onKey(e: KeyboardEvent) {
     if (e.code === "KeyH") showBoxes = !showBoxes;
@@ -22,9 +25,17 @@
     <ArenaStage matchId={data.id} {showBoxes} onstatus={(s) => (status = s)} onproblem={(m) => (problem = m)} />
   {/key}
 
-  <!-- Coach corners: empty anchors for a per-side coaching pop-in (see lib/shell/coach-calls.ts). -->
+  <!-- Coach corners: empty anchors for a per-side coaching pop-in. It hears accepted calls
+       through onCoachCall() in lib/shell/coach-calls.ts. -->
   <div class="coach left" data-coach-side="0"></div>
   <div class="coach right" data-coach-side="1"></div>
+
+  <!-- The coaches' calls: order tickets under the floor line, clear of the fighters. -->
+  {#each [0, 1] as const as side (side)}
+    {#if seat === null || seat === String(side)}
+      <div class="calls" class:right={side === 1}><CoachCalls matchId={data.id} {side} /></div>
+    {/if}
+  {/each}
 
   <!-- The fight is the screen. What little chrome there is waits in the corners. -->
   <nav class="corner absolute bottom-3 left-4 flex items-center gap-1" aria-label="Match">
@@ -69,6 +80,15 @@
   .coach.right {
     left: auto;
     right: 20px;
+  }
+  .calls {
+    position: absolute;
+    bottom: 14px;
+    left: 104px;
+  }
+  .calls.right {
+    left: auto;
+    right: 24px;
   }
   .quiet {
     display: grid;
