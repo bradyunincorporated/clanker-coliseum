@@ -1,0 +1,183 @@
+{
+  "id": "cinderhound",
+  "name": "Cinderhound",
+  "sprites": {
+    "sheet": "/fighters/cinderhound/cinderhound.json",
+    "animations": {
+      "idle": "idle",
+      "walkForward": "walkForward",
+      "walkBack": "walkBack",
+      "jump": "jump",
+      "jumpForward": "jumpForward",
+      "crouch": "crouch",
+      "block": "block",
+      "crouchBlock": "crouchBlock",
+      "hitstun": "hitstun",
+      "blockstun": "blockstun",
+      "knockdown": "knockdown",
+      "stagger": "stagger",
+      "ko": "ko",
+      "victory": "victory"
+    },
+    "loops": {
+      "idle": 3600
+    },
+    "moves": {
+      "move1": {
+        "windup": "move1_windup",
+        "strike": "move1_strike",
+        "recover": "move1_recover"
+      },
+      "move2": {
+        "windup": "move2_windup",
+        "strike": "move2_strike",
+        "recover": "move2_recover"
+      },
+      "move3": {
+        "windup": "move3_windup",
+        "strike": "move3_strike",
+        "recover": "move3_recover"
+      },
+      "move4": {
+        "windup": "move4_windup",
+        "strike": "move4_strike",
+        "recover": "move4_recover"
+      }
+    },
+    "effects": {
+      "move2": {
+        "animation": "move2_fx",
+        "linger": 6
+      },
+      "move3": {
+        "animation": "move3_fx",
+        "linger": 6
+      },
+      "move4": {
+        "animation": "move4_fx",
+        "linger": 6,
+        "behind": true,
+        "offset": {
+          "x": -55,
+          "y": 10
+        }
+      }
+    },
+    "anchor": {
+      "x": 0.5,
+      "y": 0.9
+    },
+    "scale": 0.5,
+    "color": 15234867,
+    "accent": 15258272
+  },
+  "artGuides": {
+    "status": "Suggested collision rectangles and example preview timings. Game balance is not finalized.",
+    "hurtboxes": {
+      "standing": [
+        {
+          "x": -55,
+          "y": 5,
+          "w": 90,
+          "h": 60
+        },
+        {
+          "x": -55,
+          "y": 55,
+          "w": 98,
+          "h": 65
+        },
+        {
+          "x": 30,
+          "y": 85,
+          "w": 55,
+          "h": 65
+        }
+      ],
+      "crouching": [
+        {
+          "x": -65,
+          "y": 0,
+          "w": 130,
+          "h": 42
+        },
+        {
+          "x": -60,
+          "y": 30,
+          "w": 100,
+          "h": 45
+        },
+        {
+          "x": 30,
+          "y": 45,
+          "w": 65,
+          "h": 45
+        }
+      ],
+      "airborne": [
+        {
+          "x": -55,
+          "y": 35,
+          "w": 110,
+          "h": 80
+        },
+        {
+          "x": 25,
+          "y": 100,
+          "w": 60,
+          "h": 55
+        }
+      ]
+    },
+    "moves": {
+      "move1": {
+        "name": "Bite",
+        "startup": 5,
+        "active": 4,
+        "recovery": 14,
+        "hitbox": {
+          "x": 45,
+          "y": 65,
+          "w": 55,
+          "h": 48
+        }
+      },
+      "move2": {
+        "name": "Flamethrower",
+        "startup": 15,
+        "active": 12,
+        "recovery": 28,
+        "hitbox": {
+          "x": 65,
+          "y": 80,
+          "w": 130,
+          "h": 70
+        }
+      },
+      "move3": {
+        "name": "Bulldoze",
+        "startup": 12,
+        "active": 6,
+        "recovery": 25,
+        "hitbox": {
+          "x": 5,
+          "y": 0,
+          "w": 170,
+          "h": 45
+        }
+      },
+      "move4": {
+        "name": "Flare Blitz",
+        "startup": 18,
+        "active": 8,
+        "recovery": 30,
+        "hitbox": {
+          "x": 20,
+          "y": 30,
+          "w": 135,
+          "h": 100
+        }
+      }
+    }
+  }
+}
