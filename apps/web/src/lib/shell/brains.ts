@@ -34,6 +34,15 @@ const TAGLINE = {
   clef: "Powered by Cloudflare Clef",
 } as const;
 
+/**
+ * Logo files in /static/brains, each taken from the company's own site. Only add a file
+ * that came from the official source; a brain without one shows its initial instead.
+ * clef.svg: developers.cloudflare.com (the Cloudflare mark on the Workers AI model pages).
+ */
+const LOGO: Partial<Record<BrainKind, string>> = {
+  clef: "/brains/clef.svg",
+};
+
 export const BRAIN_CARDS: BrainCard[] = BRAIN_KINDS.map((id) => {
   if (!isModelBrain(id)) return HOUSE[id];
   const m = BRAIN_MODELS[id];
@@ -42,7 +51,7 @@ export const BRAIN_CARDS: BrainCard[] = BRAIN_KINDS.map((id) => {
     label: id === "gemini" ? m.name : `${m.company} ${m.name}`,
     modelId: m.modelId,
     tagline: TAGLINE[id],
-    logo: `/brains/${id}.svg`,
+    logo: LOGO[id],
   };
 });
 
