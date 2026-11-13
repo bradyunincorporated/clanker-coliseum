@@ -15,10 +15,10 @@
   <TitleScene>
     <h1 class="logo">
       <img src="/title/logo.webp" alt={SITE_NAME} />
+      <img class="sticker" src="/title/sticker.webp" alt="Powered by System One!" />
     </h1>
     <nav class="menu" aria-label="Main menu">
       <SignButton href="/fighters" size="lg">Play</SignButton>
-      <SignButton href="/arena" tone="cream" size="sm">See the arena</SignButton>
     </nav>
   </TitleScene>
 </main>
@@ -41,9 +41,19 @@
     /* The marquee bulbs breathe. */
     animation: bulbs 1.8s ease-in-out infinite alternate;
   }
+  /* Slapped on the corner of the sign, a beat after it lands. */
+  .logo .sticker {
+    position: absolute;
+    left: -186px;
+    bottom: -100px;
+    width: 190px;
+    rotate: -11deg;
+    filter: drop-shadow(0 6px 5px rgb(12 17 38 / 0.55));
+    animation: slap 0.45s 1s cubic-bezier(0.3, 1.7, 0.5, 1) backwards;
+  }
   .menu {
     position: absolute;
-    inset: auto 0 34px;
+    inset: auto 0 52px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -54,6 +64,13 @@
     from {
       translate: 0 -120%;
       rotate: -7deg;
+    }
+  }
+  @keyframes slap {
+    from {
+      opacity: 0;
+      scale: 2.2;
+      rotate: 14deg;
     }
   }
   @keyframes bob {
@@ -71,6 +88,6 @@
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .logo, .logo img, .menu { animation: none; }
+    .logo, .logo img, .logo .sticker, .menu { animation: none; }
   }
 </style>

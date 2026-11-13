@@ -65,6 +65,8 @@
     cursor: default;
   }
   img {
+    /* Plates are often wider than their box so they can bleed past it. */
+    max-width: none;
     -webkit-user-drag: none;
   }
   ::selection {
