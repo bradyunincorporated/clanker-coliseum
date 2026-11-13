@@ -12,7 +12,8 @@
   import { plansFrom, trainersFrom } from "#lib/shell/coach-setup.js";
   import { picksFrom } from "#lib/shell/roster.js";
 
-  // Arrive from fighter select with `?p1=..&p2=..&b1=..&b2=..` and the setup is already made.
+  // Arrive from fighter select with the fighters, coaches and game plans in the query; this
+  // screen is where each fighter's brain is picked.
   const picks = $derived(picksFrom(page.url.searchParams));
   let brains = $state<Brains>(brainsFrom(page.url.searchParams));
   let service = $state<"checking" | "online" | "offline">("checking");
@@ -78,17 +79,21 @@
   </DinerDiorama>
 
   <div class="back"><SignButton href="/fighters{setupQuery(picks, brains, page.url.searchParams)}" tone="cream" size="sm">Fighters</SignButton></div>
-  <div class="plan"><SignButton href="/coach{setupQuery(picks, brains, page.url.searchParams)}" tone="cream" size="sm">Game plan</SignButton></div>
+  <h1 class="lettering heading">Pick each fighter's brain</h1>
 </main>
 
 <style>
-  .back,
-  .plan {
+  .back {
     position: absolute;
+    left: 22px;
     top: 26px;
   }
-  .back { left: 22px; }
-  .plan { right: 22px; }
+  .heading {
+    position: absolute;
+    inset: 34px 0 auto;
+    text-align: center;
+    font-size: 46px;
+  }
   /* Placed in the stage box (1280 x 720); the floor line is at 630. */
   .corner {
     position: absolute;

@@ -32,7 +32,7 @@ The look is whimsical cut-paper game art: a watercolour diner at dusk with navy 
 outlines (owner's direction, 2026-11-13: fun, high-quality game art; the 1950s inspiration
 is for mood, not for forced retro lettering). It is a video game, not a website: every
 screen is a full-bleed painted scene, controls are painted props (plank signs, a menu card,
-a service bell, podiums, a chalkboard) and plain web chrome stays out. Lettering is Lilita
+a service bell, podiums) and plain web chrome stays out. Lettering is Lilita
 One for display and Fredoka for text. The palette lives in `apps/web/src/routes/layout.css`
 and `apps/web/src/lib/arena/palette.ts`. The art is AI-generated (Gemini image models) and
 lives in `apps/web/static/{title,ui,hud,arena/diner}`. The owner supplies fighter sprites;
@@ -43,9 +43,11 @@ stacked back to front (`apps/web/src/lib/components/shell/diner-diorama.svelte`)
 never covers the fighters (owner's rule, 2026-11-13): there is no foreground plate, and the
 fight canvas is always the top layer.
 
-Site pages: `/` title screen, `/fighters` select, `/coach` game plan (each side's
-standing order), `/arena` the empty stage, `/match` the versus lobby, and `/match/<id>` the
-live match. The live match fills the whole window: the diorama is the stage and one
+Site pages: `/` title screen, `/fighters` select (fighter, coach and game plan per
+corner; the plan slip shows the preset's exact wording, read-only), `/match` the screen
+after Ready where each fighter's brain is picked and the bell is rung, `/arena` the empty
+stage, and `/match/<id>` the live match. Only the three models are offered as brains; the
+house brains are fallbacks. The live match fills the whole window: the diorama is the stage and one
 transparent PixiJS canvas over it draws fighters, effects and the painted HUD (health bars,
 alarm-clock timer, banners), with the camera held still so sim positions line up with the
 painted floor. Menu buttons there are two quiet icons in a corner. Empty hooks wait for the

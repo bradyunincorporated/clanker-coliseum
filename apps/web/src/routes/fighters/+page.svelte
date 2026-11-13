@@ -3,29 +3,34 @@
   import { page } from "$app/state";
   import TrainerSelect from "#lib/trainers/trainer-select.svelte";
   import { trainerFrom, type TrainerPicks } from "#lib/trainers/roster.js";
-  import BrainSelect from "#lib/components/shell/brain-select.svelte";
   import CornerStand from "#lib/components/shell/corner-stand.svelte";
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
+  import PlanSelect from "#lib/components/shell/plan-select.svelte";
   import SignButton from "#lib/components/ui/sign-button.svelte";
-  import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
+  import { brainsFrom, setupQuery } from "#lib/shell/brains.js";
+  import { plansFrom, type Plans } from "#lib/shell/coach-setup.js";
   import { ROSTER, picksFrom, typeInk } from "#lib/shell/roster.js";
 
   const initial = picksFrom(page.url.searchParams);
   let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
-  // Each corner picks its own brain; the choice rides along in the query (`b1`, `b2`).
-  let brains = $state<Brains>(brainsFrom(page.url.searchParams));
+  // Brains are picked on the next screen; a choice already in the query rides through.
+  const brains = brainsFrom(page.url.searchParams);
+  // Each corner's standing order, a preset: `g1`, `g2` in the query.
+  let plans = $state<Plans>(plansFrom(page.url.searchParams));
   let trainers = $state<TrainerPicks>([
     trainerFrom(page.url.searchParams.get("trainer1"), 0).id,
     trainerFrom(page.url.searchParams.get("trainer2"), 1).id,
   ]);
-  const trainerParams = $derived.by(() => {
+  const carried = $derived.by(() => {
     const params = new URLSearchParams(page.url.search);
     params.set("trainer1", trainers[0]);
     params.set("trainer2", trainers[1]);
+    params.set("g1", plans[0]);
+    params.set("g2", plans[1]);
     return params;
   });
   const chosen = $derived(picks.map((id) => ROSTER.find((f) => f.id === id) ?? ROSTER[0]));
-  const next = $derived(`/match${setupQuery([{ id: picks[0] }, { id: picks[1] }], brains, trainerParams)}`);
+  const next = $derived(`/match${setupQuery([{ id: picks[0] }, { id: picks[1] }], brains, carried)}`);
 
   function cycle(side: 0 | 1, by: number) {
     const at = ROSTER.findIndex((f) => f.id === picks[side]);
@@ -63,8 +68,8 @@
             <img src="/ui/arrow.webp" alt="" />
           </button>
         </div>
-        <CornerStand {def} {side} />
-        <BrainSelect bind:value={brains[side]} {side} class="brain" />
+        <CornerStand {def} {side} size={222} />
+        <div class="plan"><PlanSelect bind:value={plans[side]} {side} /></div>
       </section>
 
       <article class="card" class:right={side === 1}>
@@ -138,13 +143,13 @@
     gap: 8px;
     margin-bottom: 6px;
   }
-  /* Nudged toward the middle so its outer arrow stays clear of the coach row. */
-  .corner :global(.brain) {
-    margin-top: 10px;
-    translate: 34px 0;
+  /* The order slip, nudged toward the middle so it stays clear of the coach row. */
+  .plan {
+    margin-top: 6px;
+    translate: 22px 0;
   }
-  .corner.right :global(.brain) {
-    translate: -34px 0;
+  .corner.right .plan {
+    translate: -22px 0;
   }
   .arrow {
     flex: none;
@@ -309,7 +314,7 @@
   }
   .go {
     position: absolute;
-    inset: 508px 0 auto;
+    inset: 470px 0 auto;
     display: grid;
     place-items: center;
     scale: 0.9;
