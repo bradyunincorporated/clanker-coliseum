@@ -8,7 +8,7 @@
   import DinerDiorama from "#lib/components/shell/diner-diorama.svelte";
   import SignButton from "#lib/components/ui/sign-button.svelte";
   import { brainsFrom, setupQuery, type Brains } from "#lib/shell/brains.js";
-  import { ROSTER, picksFrom } from "#lib/shell/roster.js";
+  import { ROSTER, picksFrom, typeInk } from "#lib/shell/roster.js";
 
   const initial = picksFrom(page.url.searchParams);
   let picks = $state<[string, string]>([initial[0].id, initial[1].id]);
@@ -68,13 +68,20 @@
       </section>
 
       <article class="card" class:right={side === 1}>
-        <p class="types">{def.types.join(" / ")}</p>
+        <p class="types">
+          {#each def.types as type, i (type)}{i ? " / " : ""}<span style:color={typeInk(type)}>{type}</span>{/each}
+        </p>
         <p class="blurb">{def.blurb}</p>
         <h3>{def.passive.name}</h3>
         <p class="passive">{def.passive.description}</p>
+        <h4>Moves</h4>
         <ul>
           {#each Object.values(def.moves) as move (move.name)}
-            <li><span>{move.name}</span><span class="dots"></span><span class="what">{move.type} {move.damage}</span></li>
+            <li style:--type={typeInk(move.type)}>
+              <span class="splat" aria-hidden="true"></span>
+              <span class="move">{move.name}<small>{move.type}</small></span>
+              <span class="power" aria-label="{move.damage} damage">{move.damage}</span>
+            </li>
           {/each}
         </ul>
       </article>
@@ -108,7 +115,7 @@
   /* Everything below is placed in the stage box (1280 x 720); the floor line is at 630. */
   .corner {
     position: absolute;
-    left: 33%;
+    left: 33.75%;
     top: 232px;
     width: 340px;
     margin-left: -170px;
@@ -117,10 +124,10 @@
     align-items: center;
   }
   .corner.right {
-    left: 67%;
+    left: 66.25%;
   }
   .name {
-    min-width: 230px;
+    min-width: 196px;
     font-size: 42px;
     text-align: center;
     white-space: nowrap;
@@ -134,10 +141,10 @@
   /* Nudged toward the middle so its outer arrow stays clear of the coach row. */
   .corner :global(.brain) {
     margin-top: 10px;
-    translate: 44px 0;
+    translate: 34px 0;
   }
   .corner.right :global(.brain) {
-    translate: -44px 0;
+    translate: -34px 0;
   }
   .arrow {
     flex: none;
@@ -165,24 +172,26 @@
   .arrow:active {
     scale: 0.9;
   }
+  /* The fighter's menu card: tall, with the paper's printed corners kept square. */
   .card {
     position: absolute;
-    left: 8px;
-    top: 280px;
-    width: 262px;
-    min-height: 262px;
-    padding: 30px 34px 34px;
-    background: url("/ui/card.webp") center / 100% 100% no-repeat;
+    left: 4px;
+    top: 94px;
+    width: 278px;
+    min-height: 478px;
+    padding: 2px 4px 4px;
+    border: 40px solid transparent;
+    border-image: url("/ui/card.webp") 215 fill / 40px;
     color: var(--ink);
-    font-size: 12.5px;
+    font-size: 14px;
     line-height: 1.3;
-    rotate: -2deg;
+    rotate: -1.5deg;
     filter: drop-shadow(0 8px 6px rgb(10 14 34 / 0.55));
   }
   .card.right {
     left: auto;
-    right: 8px;
-    rotate: 2deg;
+    right: 4px;
+    rotate: 1.5deg;
   }
   /* The coach row needs 350px to lay out four sprites evenly; shown a little smaller so it
      stays inside its corner, clear of the podium and the brain sign. */
@@ -201,60 +210,115 @@
   }
   .types {
     font-family: var(--font-display);
-    font-size: 15px;
+    font-size: 21px;
+    line-height: 1.1;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--hero-red);
+    color: var(--ink);
   }
   .blurb {
-    margin-top: 2px;
+    margin-top: 5px;
     font-weight: 600;
   }
   .card h3 {
-    margin-top: 9px;
+    margin-top: 12px;
     font-family: var(--font-display);
-    font-size: 17px;
+    font-size: 20px;
     line-height: 1.1;
   }
-  .card ul {
-    margin-top: 9px;
-    padding-top: 7px;
+  .card h4 {
+    margin-top: 12px;
+    padding-top: 9px;
     border-top: 2px dotted rgb(27 33 64 / 0.4);
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hero-red);
   }
+  .card ul {
+    margin-top: 4px;
+  }
+  /* A move: a splat of its type's paint, its name, and its damage stamped big. */
   .card li {
     display: flex;
-    align-items: baseline;
-    gap: 5px;
-    font-weight: 600;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 0;
+    animation: deal 0.4s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
   }
-  .dots {
+  .card li:nth-child(2) { animation-delay: 0.06s; }
+  .card li:nth-child(3) { animation-delay: 0.12s; }
+  .card li:nth-child(4) { animation-delay: 0.18s; }
+  .card li + li {
+    border-top: 1px solid rgb(27 33 64 / 0.14);
+  }
+  .splat {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--ink);
+    border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%;
+    background: var(--type);
+    rotate: -8deg;
+  }
+  .move {
+    display: flex;
     flex: 1;
-    border-bottom: 2px dotted rgb(27 33 64 / 0.35);
-    translate: 0 -3px;
+    min-width: 0;
+    flex-direction: column;
+    font-family: var(--font-display);
+    font-size: 19px;
+    line-height: 1.05;
   }
-  .what {
-    color: #2b6a63;
+  .move small {
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--type);
+  }
+  .power {
+    flex: none;
+    min-width: 34px;
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1;
+    text-align: right;
+    color: var(--hero-red);
+    -webkit-text-stroke: 1.5px var(--ink);
+    paint-order: stroke fill;
+    text-shadow: 2px 2px 0 var(--mustard);
+    rotate: -4deg;
+  }
+  @keyframes deal {
+    from {
+      opacity: 0;
+      translate: -14px 0;
+    }
   }
   .vs {
     position: absolute;
     left: 50%;
-    top: 318px;
-    width: 150px;
-    margin-left: -75px;
+    top: 328px;
+    width: 130px;
+    margin-left: -65px;
     filter: drop-shadow(0 8px 6px rgb(10 14 34 / 0.55));
     animation: thump 1.6s ease-in-out infinite alternate;
   }
   .go {
     position: absolute;
-    inset: 506px 0 auto;
+    inset: 508px 0 auto;
     display: grid;
     place-items: center;
+    scale: 0.9;
   }
   @keyframes thump {
     from { scale: 0.96; rotate: -2deg; }
     to { scale: 1.04; rotate: 2deg; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .vs { animation: none; }
+    .vs, .card li { animation: none; }
   }
 </style>

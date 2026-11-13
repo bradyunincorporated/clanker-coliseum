@@ -5,8 +5,7 @@
 
   /**
    * One fighter's brain, picked like a jukebox selection: step through the options with the
-   * arrows. Shows the maker's logo where there is an official one, the official model id and
-   * the "powered by" line. Each fighter has its own; nothing is shared between corners.
+   * arrows. Shows the maker's mark on a badge, the model's name and its official model id. Each fighter has its own; nothing is shared between corners.
    */
   interface Props {
     value: BrainKind;
@@ -31,11 +30,11 @@
     <img src="/ui/arrow.webp" alt="" />
   </button>
   <div class="plate" aria-live="polite">
-    {#if card.logo}<img class="logo" src={card.logo} alt="" />{/if}
+    {#if card.logo}<span class="badge"><img src={card.logo} alt="" /></span>{/if}
     <p class="text">
       <span class="name">{card.label}</span>
       <span class="sub" title={down && isModelBrain(value) ? models?.[value].reason : undefined}>
-        {#if down}offline, the heuristic fills in{:else}{card.modelId ? `${card.modelId} · ` : ""}{card.tagline}{/if}
+        {#if down}offline, the heuristic fills in{:else}{card.modelId || card.tagline}{/if}
       </span>
     </p>
   </div>
@@ -63,14 +62,22 @@
     background: url("/ui/sign-teal.webp") center / 100% 100% no-repeat;
     filter: drop-shadow(0 5px 4px rgb(10 14 34 / 0.55));
   }
-  .logo {
-    width: 26px;
-    height: 26px;
+  /* Every maker's mark gets the same cream button with an inked rim. */
+  .badge {
+    display: grid;
     flex: none;
-    object-fit: contain;
-    padding: 3px;
-    border-radius: 6px;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
     background: var(--paper);
+    box-shadow: 0 2px 0 rgb(16 74 82 / 0.9);
+  }
+  .badge img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
   }
   .text {
     display: flex;
