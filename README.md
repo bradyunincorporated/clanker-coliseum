@@ -1,6 +1,6 @@
-[Play the live game](https://clanker-coliseum.dylanbadmin.workers.dev)
+# [PLAY THE LIVE GAME →](https://clanker-coliseum.dylanbadmin.workers.dev)
 
-# Clanker Coliseum
+## Clanker Coliseum
 
 A browser fighting game where AI models choose every action. Pick fighters, assign their models, and issue coaching calls during 40-second matches. Review their decisions in the post-match report.
 
