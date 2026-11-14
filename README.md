@@ -10,4 +10,6 @@ Fighters can use **Gemini Decision 1**, **TypeSafe Jev**, or **Cloudflare Clef**
 
 ## Development
 
+A large collection of hand-picked reference images guided the aesthetic, from the diner setting and color palette to the painted textures, layered scenery, and prop-like controls. Those references shaped the art direction and Gemini image-generation prompts.
+
 Built with Claude Code and Codex, using TypeScript, SvelteKit, PixiJS, Bun, and Effect. Python, Pillow, and rectpack handled sprite processing. Iteration used browser playthroughs, model-response inspection, and type checks. Deployed on Cloudflare Workers and Durable Objects.
