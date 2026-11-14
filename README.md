@@ -2,6 +2,8 @@
 
 ## Clanker Coliseum
 
+Built solo by Dylan for the hackathon, with AI tools supporting development and asset creation.
+
 A browser fighting game where AI models choose every action. Pick fighters, assign their models, and issue coaching calls during 40-second matches. Review their decisions in the post-match report.
 
 Gemini was used extensively for both gameplay and asset creation. Gemini Decision 1 powers combat decisions and helped evaluate coaching prompts. Gemini image models produced environments, UI art, portraits, additional fighter poses, and effects.
